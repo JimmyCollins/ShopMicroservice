@@ -1,6 +1,7 @@
 var http = require('http'),
     fs = require('fs'),
     url = require('url');
+var qs = require('querystring');
 var p = require('path');
 var qs = require('querystring');
 var mysql = require('mysql');
@@ -9,26 +10,52 @@ var headers = [
     "Product Name", "Price", "Picture", "Buy Button"
 ];
 
-
 var db = mysql.createConnection({
     host:     'localhost',
     user:     'root',
     password: 'root',
     database: 'shop'
 });
+
 var cart = [];
 var theuser=null;
 var theuserid =null;
 var server = http.createServer(function (request, response) {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
+
     if (request.method == 'POST') {
         switch (path) {
 
-
-            /* TODO */
+            // Add a new product
             case "/newProduct":
+                console.log("Inside newProduct");
 
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+                    var product = qs.parse(body);
+
+                    // Create SQL
+                    var dbInsert = "INSERT INTO products (name, quantity, price, image) VALUES ( '" + product.name + "','" + product.quantity + "','" + product.price + "','" + product.productImage + "');"
+                    console.log(dbInsert2.toString());
+
+                    // Execute SQL
+                    db.query(
+                        dbInsert,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                            console.log("Product sent");
+                        }
+                    );
+                });
 
                 break;
         } //switch

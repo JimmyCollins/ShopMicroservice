@@ -303,7 +303,7 @@
                 var fd = $('#newProductForm').serialize();
 
                 $.post(
-                        "/newProduct",
+                        "http://localhost:3002/newProduct",
                         fd,
                         function (data) {
                             console.log(data);
@@ -402,7 +402,8 @@
                 <br>
 
                 Image:<br>
-                <input type="file" name="productImage" value="">
+                <input type="text" name="productImage" value="">
+                <!--<input type="file" name="productImage" value="">-->
                 <br>
                 <br>
                 <input type="submit">
