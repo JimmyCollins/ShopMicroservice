@@ -27,6 +27,8 @@ var server = http.createServer(function (request, response) {
     if (request.method == 'POST') {
         switch (path) {
 
+            // Assignment Part 3 (b) - Handle the new product in the catalogue service
+
             // Add a new product
             case "/newProduct":
                 console.log("Inside newProduct");
@@ -42,7 +44,7 @@ var server = http.createServer(function (request, response) {
 
                     // Create SQL
                     var dbInsert = "INSERT INTO products (name, quantity, price, image) VALUES ( '" + product.name + "','" + product.quantity + "','" + product.price + "','" + product.productImage + "');"
-                    console.log(dbInsert2.toString());
+                    //console.log(dbInsert.toString());
 
                     // Execute SQL
                     db.query(
@@ -52,7 +54,7 @@ var server = http.createServer(function (request, response) {
                             if (err) throw err;
                             console.log(JSON.stringify(result, null, 2));
                             response.end(JSON.stringify(result));
-                            console.log("Product sent");
+                            console.log("Product added!");
                         }
                     );
                 });

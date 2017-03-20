@@ -14,23 +14,37 @@ app.use(bodyParser.json());
 var cart = [];
 
 app.post("/add", function (req, res, next) {
+
     var obj = req.body;
     console.log("add ");
     console.log("Attempting to add to cart: " + JSON.stringify(req.body));
 
-
-    //  var obj = JSON.parse(body);
-
-    //       console.log('addToCart id '+id)
     var max = 0;
     var ind = 0;
+
     if (cart["" + obj.custId] === undefined)
         cart["" + obj.custId] = [];
+
     var c = cart["" + obj.custId];
+
+    // Assignment Part 4 (a) - Combine the items in the cart if the user orders a product more than once
+    for(var i = 0; i < c.length; i++)
+    {
+        if(c[i].productID === obj.productID)
+        {
+            console.log("Already a product with that ID in the cart!")
+            c[i].quantity = Number(c[i].quantity) + Number(obj.quantity);
+            res.send(201);
+            return;
+        }
+    }
+
     for (ind = 0; ind < c.length; ind++)
         if (max < c[ind].cartid)
             max = c[ind].cartid;
+
     var cartid = max + 1;
+
     var data = {
         "cartid": cartid,
         "productID": obj.productID,
@@ -39,7 +53,8 @@ app.post("/add", function (req, res, next) {
         "image": obj.image,
         "quantity": obj.quantity
     };
-    console.log(JSON.stringify(data));
+
+    //console.log(JSON.stringify(data));
     c.push(data);
 
     res.status(201);
