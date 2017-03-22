@@ -81,7 +81,7 @@ app.delete("/cart/:custId/items/:id", function (req, res, next) {
 });
 
 
-app.get("/cart/:custId/items", function (req, res, next) {
+app.get("/cart/:custId/items/", function (req, res, next) {
 
 
     var custId = req.params.custId;

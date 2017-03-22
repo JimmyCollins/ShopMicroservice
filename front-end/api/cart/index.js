@@ -50,25 +50,40 @@
   });
 
   // Delete cart
-  app.delete("/cart", function (req, res, next) {
+  app.delete("/cart", function (req, res, next)
+  {
+   console.log("Request received (delete cart): " + req.url + ", " + req.query.custId);
+
     var custId = helpers.getCustomerId(req, app.get("env"));
+
     console.log('Attempting to delete cart for user: ' + custId);
+    //console.log(req);
+
+      console.log(endpoints.cartsUrl + "/" + custId + "/" + req.body.productID);
+
     var options = {
-      uri: endpoints.cartsUrl + "/" + custId,
+      uri: endpoints.cartsUrl + "/" + custId + "/" + req.params.productID,
       method: 'DELETE'
     };
+
     request(options, function (error, response, body) {
       if (error) {
         return next(error);
       }
+
       console.log('User cart deleted with status: ' + response.statusCode);
       helpers.respondStatus(res, response.statusCode);
     });
+
   });
 
   // Delete item from cart
-  app.delete("/cart/:id", function (req, res, next) {
-    if (req.params.id == null) {
+  app.delete("/cart/:id", function (req, res, next)
+  {
+      console.log("Request received (delete item from cart): " + req.url + ", " + req.query.custId);
+
+    if (req.params.id == null)
+    {
       return next(new Error("Must pass id of item to delete"), 400);
     }
 
@@ -80,13 +95,17 @@
       uri: endpoints.cartsUrl + "/" + custId + "/items/" + req.params.id.toString(),
       method: 'DELETE'
     };
-    request(options, function (error, response, body) {
-      if (error) {
+
+    request(options, function (error, response, body)
+    {
+      if (error)
+      {
         return next(error);
       }
       console.log('Item deleted with status: ' + response.statusCode);
       helpers.respondStatus(res, response.statusCode);
     });
+
   });
 
   // Add new item to cart

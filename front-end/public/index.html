@@ -15,12 +15,12 @@
             text-align: center;
         }
 
-        nav {
+        /*nav {
             float: left;
             max-width: 160px;
             margin: 0;
             padding: 1em;
-        }
+        }*/
 
         nav ul {
             list-style-type: none;
@@ -29,6 +29,13 @@
 
         nav ul a {
             text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar .navbar-nav {
+            display: inline-block;
+            float: none;
+            vertical-align: top;
         }
 
         article {
@@ -38,31 +45,42 @@
             overflow: hidden;
         }
 
-        table {
+        /*table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
-        }
+        }*/
 
-        td, th {
+        /*td, th {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
+        }*/
+
+        .table th, .table td {
+            border-top: none !important;
         }
 
         tr:nth-child(even) {
             background-color: #dddddd;
         }
+
+        .panel {
+            border: none !important;
+        }
     </style>
 
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script type="text/javascript" language="javascript">
         var headers = [
-            "Product Name", "Price", "Picture", "Quantity", "Buy Button"];
+            "Product Name", "Price", "Picture", "Quantity", ""];
         var Cartheaders = [
-            "Product Name", "Price", "Picture", "delete", "Quantity","Total"];
+            "Product Name", "Price", "Picture", "Quantity","Total", ""];
         $(document).ready(function () {
 
         });
@@ -97,6 +115,8 @@
             $("#login").hide();
             $("#register").hide();
             $("#newProduct").hide();
+            $("#products").hide();
+            $("#cart").hide();
         }
         function showLogin() {
             hideAll();
@@ -131,12 +151,13 @@
                 data: JSON.stringify(dat),
                 success: function () {
 
-                    alert("Thanks!");
+                    $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Car added to cart successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
                 }
             });
 
 
         }
+
         function checkout() {
 
 
@@ -166,10 +187,16 @@
             str = JSON.stringify(products[itemNo]);
             window.alert("You selected " + str);
         }
+
         function displayProducts(products, name) {
-            var out = "<table border=1 width=100%>";
+
+            var out = '<div class="panel panel-default">';
+
+            out += '<div class="panel-heading">Currently Available Cars</div>';
+
+            out += "<table class=table borderless>";
             var i;
-            out += '<tr style="font-size: 20px;" >';
+            out += '<tr" >';
             for (i = 0; i < headers.length; i++) {
                 out += '<th >' + headers[i] + '</th>';
             }
@@ -180,22 +207,30 @@
                 out += '<td>' + products[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + products[i].image + '" style="width:104px;height:100px;">';
-                out += '<td>' + 'quantity <input type="text" value="1" name="';
+                out += '<td>' + '<input class="form-control" type="text" value="1" name="';
                 out += 'quantity' + i + '" id="quant' + i
                 out += '">' + '</td>';
 
-                out += '<td> <button onclick="addToCart(' + products[i].productID;
+                out += '<td> <button class="btn btn-default" onclick="addToCart(' + products[i].productID;
                 out += ",'quant" + i + "')" + '">Buy</button></td>';
                 out += "</tr>";
             }
             out += "</table>";
+
+            out += "</div>";
+
             document.getElementById(name).innerHTML = out;
         }
 
         function displayCart(cart, name) {
-            var out = "<h1> Shopping Cart</h1><table border=1 width=100%>";
+
+            var out = '<div class="panel panel-default">';
+
+            out += '<div class="panel-heading">Shopping Cart Contents</div>';
+
+            out += "<table class='table'>";
             var i;
-            out += '<tr style="font-size: 20px;" >';
+            out += '<tr>';
             for (i = 0; i < Cartheaders.length; i++) {
                 out += '<th >' + Cartheaders[i] + '</th>';
             }
@@ -207,18 +242,25 @@
                 out += '<td>' + cart[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + cart[i].image + '" style="width:104px;height:100px;">';
-                out += '<td> <button onclick="deleteCartItem(' + cart[i].cartid;
-                out1 = ")" + '">Delete</button></td>';
-                out += out1;
+
                 out += '<td>' + cart[i].quantity + '</td>';
                 out += '<td>' + cart[i].price* cart[i].quantity + '</td>';
+
+                out += '<td> <button class="btn btn-default" onclick="deleteCartItem(' + cart[i].cartid;
+                out1 = ")" + '">Delete</button></td>';
+                out += out1;
+
                 out += "</tr>";
                 total += cart[i].price* cart[i].quantity;
+
+
             }
             out += "</table>";
+            out += "</div>";
+
             out += "<br>";
             out += "Total: "+total +'<br>';
-            out += '<button onclick="checkout()">Checkout</button><br>';
+            out += '<button class="btn btn-default" onclick="checkout()">Checkout</button><br>';
             out+='<div id="cartmessage"></div>';
             document.getElementById(name).innerHTML = out;
         }
@@ -235,6 +277,7 @@
 
                 event.preventDefault();
                 $("#login").hide();
+
 
                 var o={};
                 var a = $('#logonForm').serializeArray();
@@ -258,7 +301,9 @@
                     data: fd,
                     success: function () {
 
-                        alert("Thanks!");
+                        $("#alertarea").show();
+                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Logged in Successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
                     }
                 });
 
@@ -291,7 +336,8 @@
                     data: fd,
                     success: function () {
 
-                        alert("Thanks!");
+                        $("#alertarea").show();
+                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Thanks for registering!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
                     }
                 });
 
@@ -307,7 +353,9 @@
                         fd,
                         function (data) {
                             console.log(data);
-                            $('#logonmessage').html(data);
+                            //$('#logonmessage').html(data);
+                            $("#alertarea").show();
+                            $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
                         }
                 );
 
@@ -320,74 +368,86 @@
         });
     </script>
 </head>
+
+
 <body>
 
-<div class="container">
+<div class="container-fluid">
 
     <header>
-        <h1>Shop</h1>
+        <h1>Car Dealership</h1>
     </header>
 
-    <nav>
-        <ul>
-            <li> <button onclick="getProducts()"> Show Products </button></li>
-            <li>
-                <button onclick="getCart()"> Show Cart </button></li>
-            <li>
-                <button onclick="showLogin()">Login </button></li>
-            <li>
-                <button onclick="showRegister()">Register </button></li>
-            <li>
-                <button onclick="showNewProduct()">New Product </button></li>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid" style="text-align: center">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a onclick="getProducts()">Show Cars </a>
+                        </li>
+                        <li>
+                            <a onclick="getCart()">Show Cart </a>
+                        </li>
+                        <li>
+                            <a onclick="showLogin()">Login </a>
+                        </li>
+                        <li>
+                            <a onclick="showRegister()">Register</a>
+                        </li>
+                        <li>
+                            <a onclick="showNewProduct()">New Car</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-        </ul>
-    </nav>
+            <div id="alertarea"></div>
+            <div id="cart"></div>
+            <div id="products"></div>
+            <div id="logonmessage"></div>
+            <div id="login">
+                <h1>Login</h1>
+                <p>
 
-    <article>
+                <form id="logonForm" action="">
+                    <div class="form-group">
 
-        <div id="cart"></div>
-        <div id="products"></div>
-        <div id="logonmessage"></div>
-        <div id="login">
-            <h1>Login</h1>
-            <p>
+                        Name:<br>
+                        <input type="text" name="name" value="">
+                        <br>
+                        Password:<br>
+                        <input type="text" name="password" value="">
+                        <br>
+                        <br>
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            <div id="register">
+                <h1>Register</h1>
+                <p>
 
-            <form id="logonForm" action="">
+                <form id="registerForm" action="">
 
-                Name:<br>
-                <input type="text" name="name" value="">
-                <br>
-                Password:<br>
-                <input type="text" name="password" value="">
-                <br>
-                <br>
-            <input type="submit">
-            </form>
-        </div>
-        <div id="register">
-            <h1>Register</h1>
-            <p>
+                    Name:<br>
+                    <input type="text" name="name" value="">
+                    <br>
+                    Address:<br>
+                    <input type="text" name="address" value="">
+                    <br>
+                    Password:<br>
+                    <input type="text" name="password" value="">
+                    <br>
+                    <br>
+                    <input type="submit" class="btn btn-primary">
+                </form>
+            </div>
+            <div id="newProduct">
+                <h1>New Product</h1>
+                <p>
 
-            <form id="registerForm" action="">
-
-                Name:<br>
-                <input type="text" name="name" value="">
-                <br>
-                Address:<br>
-                <input type="text" name="address" value="">
-                <br>
-                Password:<br>
-                <input type="text" name="password" value="">
-                <br>
-                <br>
-                <input type="submit">
-            </form>
-        </div>
-        <div id="newProduct">
-            <h1>New Product</h1>
-            <p>
-
-            <form id="newProductForm" action="">
+                <form id="newProductForm" action="">
 
                 Name:<br>
                 <input type="text" name="name" value="">
@@ -406,10 +466,11 @@
                 <!--<input type="file" name="productImage" value="">-->
                 <br>
                 <br>
-                <input type="submit">
-            </form>
+                <input type="submit" class="btn btn-primary">
+                </form>
+            </div>
         </div>
-    </article>
+    </div>
 </div>
 </body>
 </html>
