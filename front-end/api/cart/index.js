@@ -92,7 +92,7 @@
     var custId = helpers.getCustomerId(req, app.get("env"));
 
     var options = {
-      uri: endpoints.cartsUrl + "/" + custId + "/items/" + req.params.id.toString(),
+      uri: endpoints.cartsUrl + "/cart/" + custId + "/items/" + req.params.id.toString(),
       method: 'DELETE'
     };
 

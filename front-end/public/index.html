@@ -173,13 +173,23 @@
         }
 
         function deleteCartItem(count) {
-            $.post(
+
+            $.ajax({
+                url: '/cart/' + count,
+                type: 'DELETE',
+                success: function(result) {
+                    getCart();
+                }
+            });
+
+
+            /*$.post(
                     "/delete",
                     {cnt: count},
                     function (data) {
 
                     }
-            );
+            );*/
 
         }
 
@@ -301,7 +311,7 @@
                     data: fd,
                     success: function () {
 
-                        $("#alertarea").show();
+                        //$("#alertarea").show();
                         $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Logged in Successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
 
                     }
@@ -336,7 +346,7 @@
                     data: fd,
                     success: function () {
 
-                        $("#alertarea").show();
+                        //$("#alertarea").show();
                         $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Thanks for registering!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
                     }
                 });
@@ -354,7 +364,7 @@
                         function (data) {
                             console.log(data);
                             //$('#logonmessage').html(data);
-                            $("#alertarea").show();
+                            //$("#alertarea").show();
                             $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
                         }
                 );

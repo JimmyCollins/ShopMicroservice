@@ -64,19 +64,30 @@ app.post("/add", function (req, res, next) {
 
 });
 
-/* toDO */
+
 app.delete("/cart/:custId/items/:id", function (req, res, next) {
+
     var body = '';
-    console.log("Delete item from cart: for custId " + req.url + ' ' +
-        req.params.id.toString());
-    console.log("delete ");
+    console.log("Delete item from cart: for custId " + req.url + ' ' +  req.params.id.toString());
 
+    var c = cart["" + req.params.custId];
 
+    // Assignment Part 4 (c) - Delete item from cart
+    for(var i = 0; i < c.length; i++)
+    {
+        if(c[i].cartid === Number(req.params.id))
+        {
+            console.log("Found item to delete");
 
+            var indexOfElementToDelete = c.indexOf(c[i]);
+            c.splice(indexOfElementToDelete, 1);
 
+            res.send(201);
+            return;
+        }
+    }
 
     res.send(' ');
-
 
 });
 
