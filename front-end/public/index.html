@@ -152,6 +152,8 @@
                 success: function () {
 
                     $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Car added to cart successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                    window.setTimeout(function() { $("#alertarea").alert('close'); }, 5000);
                 }
             });
 
@@ -181,15 +183,6 @@
                     getCart();
                 }
             });
-
-
-            /*$.post(
-                    "/delete",
-                    {cnt: count},
-                    function (data) {
-
-                    }
-            );*/
 
         }
 
@@ -221,7 +214,7 @@
                 out += 'quantity' + i + '" id="quant' + i
                 out += '">' + '</td>';
 
-                out += '<td> <button class="btn btn-default" onclick="addToCart(' + products[i].productID;
+                out += '<td> <button class="btn btn-success" onclick="addToCart(' + products[i].productID;
                 out += ",'quant" + i + "')" + '">Buy</button></td>';
                 out += "</tr>";
             }
@@ -256,7 +249,7 @@
                 out += '<td>' + cart[i].quantity + '</td>';
                 out += '<td>' + cart[i].price* cart[i].quantity + '</td>';
 
-                out += '<td> <button class="btn btn-default" onclick="deleteCartItem(' + cart[i].cartid;
+                out += '<td> <button class="btn btn-danger" onclick="deleteCartItem(' + cart[i].cartid;
                 out1 = ")" + '">Delete</button></td>';
                 out += out1;
 
@@ -268,9 +261,9 @@
             out += "</table>";
             out += "</div>";
 
-            out += "<br>";
-            out += "Total: "+total +'<br>';
-            out += '<button class="btn btn-default" onclick="checkout()">Checkout</button><br>';
+            out += "<br><br>";
+            out += "<h3>Total: <span class='badge'> " + total +'</span></h3><br>';
+            out += '<button class="btn btn-primary" onclick="checkout()">Checkout for <span class="badge"</span>' + total + '</button><br>';
             out+='<div id="cartmessage"></div>';
             document.getElementById(name).innerHTML = out;
         }
@@ -406,7 +399,7 @@
                             <a onclick="showRegister()">Register</a>
                         </li>
                         <li>
-                            <a onclick="showNewProduct()">New Car</a>
+                            <a onclick="showNewProduct()">New Product</a>
                         </li>
                     </ul>
                 </div>
