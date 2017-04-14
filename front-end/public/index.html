@@ -94,7 +94,8 @@
         /**
          * Show the new product page
          */
-        function showNewProduct() {
+        function showNewProduct()
+        {
             hideAll();
             $("#newProduct").show();
 
@@ -286,7 +287,6 @@
                 event.preventDefault();
                 $("#login").hide();
 
-
                 var o={};
 
                 var a = $('#logonForm').serializeArray();
@@ -353,7 +353,7 @@
 
             });
 
-            // Handler for when a new product is submitted
+            // Handler for when a new product is submitted -- TODO - Move to calling the Stock management service?
             $('#newProductForm').on( "submit",function(event)
             {
                 event.preventDefault();

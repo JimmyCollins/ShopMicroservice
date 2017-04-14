@@ -32,7 +32,9 @@ var server = http.createServer(function (request, response)
         {
             // Assignment Part 3 (b) - Handle the new product in the catalogue service
 
-            // Add a new product
+            // Add a new product - TODO - Move to stock management service?
+            // catalogue will most likely just end up holding getProducts and getProduct - all CRUD of products will be handled via the new stock managment service
+
             case "/newProduct":
                 console.log("Inside newProduct");
 
