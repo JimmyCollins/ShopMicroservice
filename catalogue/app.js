@@ -1,11 +1,12 @@
-var http = require('http'),
-    fs = require('fs'),
-    url = require('url');
+var http = require('http');
+var fs = require('fs');
+var url = require('url');
 var qs = require('querystring');
 var p = require('path');
-var qs = require('querystring');
+//var qs = require('querystring');
 var mysql = require('mysql');
 var root = __dirname;
+
 var headers = [
     "Product Name", "Price", "Picture", "Buy Button"
 ];
@@ -20,13 +21,15 @@ var db = mysql.createConnection({
 var cart = [];
 var theuser=null;
 var theuserid =null;
-var server = http.createServer(function (request, response) {
+var server = http.createServer(function (request, response)
+{
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
 
-    if (request.method == 'POST') {
-        switch (path) {
-
+    if (request.method == 'POST')
+    {
+        switch (path)
+        {
             // Assignment Part 3 (b) - Handle the new product in the catalogue service
 
             // Add a new product
@@ -60,20 +63,20 @@ var server = http.createServer(function (request, response) {
                 });
 
                 break;
-        } //switch
+        }
     }
-    else {
-        switch (path) {
-
-
-            case "/getProducts"    :
+    else
+    {
+        switch (path)
+        {
+            // Get the list of available products in the database
+            case "/getProducts":
                 console.log("getProducts");
                 response.writeHead(200, {
                     'Content-Type': 'text/html',
                     'Access-Control-Allow-Origin': '*'
                 });
                 var query = "SELECT * FROM products ";
-
 
                 db.query(
                     query,
@@ -85,9 +88,10 @@ var server = http.createServer(function (request, response) {
                         console.log("Products sent");
                     }
                 );
-
                 break;
-            case "/getProduct"    :
+
+            // Get details of a specific product
+            case "/getProduct":
                 console.log("getProduct");
                 var body="";
                 request.on('data', function (data) {
@@ -104,7 +108,6 @@ var server = http.createServer(function (request, response) {
                     var query = "SELECT * FROM products where productID="+
                         product.id;
 
-
                     db.query(
                         query,
                         [],
@@ -117,19 +120,9 @@ var server = http.createServer(function (request, response) {
                     );
 
                 });
-
-
-
                 break;
-
-
-
-
         }
     }
-
-
-
 });
 
 server.listen(3002);
