@@ -1,8 +1,12 @@
-var http = require('http'),
-    url = require('url');
+/**
+ * Users Service
+ *
+ * TODO
+ */
 
+var http = require('http');
+var url = require('url');
 var mysql = require('mysql');
-
 
 var db = mysql.createConnection({
     host:     'localhost',
@@ -10,18 +14,23 @@ var db = mysql.createConnection({
     password: 'root',
     database: 'shop'
 });
+
 var cart = [];
-var theuser=null;
-var theuserid =null;
-var server = http.createServer(function (request, response) {
+var theuser = null;
+var theuserid = null;
+
+var server = http.createServer(function (request, response)
+{
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
     console.log("path: "+path);
     console.log("url: "+url1)
-    if (request.method == 'POST') {
-        switch (path) {
 
-
+    if (request.method == 'POST')
+    {
+        switch (path)
+        {
+            // Login functionality
             case "/login":
                 var body = '';
                 console.log("user Login ");
@@ -32,7 +41,7 @@ var server = http.createServer(function (request, response) {
                 request.on('end', function () {
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM Customer where name='"+obj.name+"'";
+                    var query = "SELECT * FROM users where name='" + obj.name + "'";
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -41,12 +50,14 @@ var server = http.createServer(function (request, response) {
                         query,
                         [],
                         function(err, rows) {
-                            if (err) {
+                            if (err)
+                            {
                                 response.end('{"error": "1"}');
                                 throw err;
                             }
-                            if (rows!=null && rows.length>0) {
-                                console.log(" user in database" );
+                            if (rows!=null && rows.length>0)
+                            {
+                                console.log("User is in the database" );
                                 theuserid = rows[0].customerID;
                                 var obj = {
                                     id: theuserid
@@ -54,9 +65,10 @@ var server = http.createServer(function (request, response) {
                                 response.end(JSON.stringify(obj));
 
                             }
-                            else{
+                            else
+                            {
                                 response.end('{"error": "1"}');
-                                console.log(" user not in database");
+                                console.log("User is not in the database");
 
                             }
 
@@ -66,9 +78,9 @@ var server = http.createServer(function (request, response) {
 
                 });
 
-
                 break;
 
+            // Registration functionality
             case "/register":
                 var body = '';
                 console.log("user Register ");
@@ -79,7 +91,7 @@ var server = http.createServer(function (request, response) {
                 request.on('end', function () {
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM Customer where name='"+obj.name+"'";
+                    var query = "SELECT * FROM users where name='" + obj.name + "'";
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -93,12 +105,12 @@ var server = http.createServer(function (request, response) {
                                 throw err;
                             }
                             if (rows!=null && rows.length>0) {
-                                console.log(" user already in database");
+                                console.log("User already exists in the database");
                                 response.end('{"error": "2"}');
                             }
                             else{
-                                query = "INSERT INTO Customer (name, password, address)"+
-                                        "VALUES(?, ?, ?)";
+                                query = "INSERT INTO users (name, password, address, usertype)"+
+                                        "VALUES(?, ?, ?, 2)"; // FIXME: By default users are added as customers, need to be changed to admin currently in the database
                                 db.query(
                                     query,
                                     [obj.name,obj.password,obj.address],
@@ -121,15 +133,12 @@ var server = http.createServer(function (request, response) {
                         }
                     );
 
-
                 });
 
-
                 break;
-        } //switch
+        }
     }
    
 
 });
 server.listen(3001);
-
