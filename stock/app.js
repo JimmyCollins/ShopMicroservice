@@ -50,14 +50,14 @@ var server = http.createServer(function (request, response)
         switch (path)
         {
             // Get the current stock numbers for each product
-            case "currentStock":
+            case "/currentStock":
 
                 // TODO
 
                 break;
 
             // Get the top 5 best sellers
-            case "bestSellers":
+            case "/bestSellers":
 
                 // TODO
 

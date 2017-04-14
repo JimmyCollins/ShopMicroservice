@@ -72,7 +72,7 @@ var server = http.createServer(function (request, response)
                 break;
 
             // Deactive a product (but leave it in the catalogue)
-            case "deactivateProduct":
+            case "/deactivateProduct":
 
                 // TODO
 
