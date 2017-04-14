@@ -32,9 +32,7 @@ var server = http.createServer(function (request, response)
         {
             // Assignment Part 3 (b) - Handle the new product in the catalogue service
 
-            // Add a new product - TODO - Move to stock management service?
-            // catalogue will most likely just end up holding getProducts and getProduct - all CRUD of products will be handled via the new stock managment service
-
+            // Add a new product to the catalogue
             case "/newProduct":
                 console.log("Inside newProduct");
 
@@ -63,6 +61,20 @@ var server = http.createServer(function (request, response)
                         }
                     );
                 });
+
+                break;
+
+            // Delete a product from the catalogue
+            case "/deleteProduct":
+
+                // TODO
+
+                break;
+
+            // Deactive a product (but leave it in the catalogue)
+            case "deactivateProduct":
+
+                // TODO
 
                 break;
         }

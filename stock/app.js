@@ -26,8 +26,8 @@ var server = http.createServer(function (request, response)
     {
         switch (path)
         {
-            // Add new product
-            case "/add":
+            // Add to stock number for a product
+            case "/incrementStock":
 
                 console.log("Stock Management Service - Add");
 
@@ -35,35 +35,35 @@ var server = http.createServer(function (request, response)
 
                 break;
 
-            // Update an existing product
-            case "/update":
-
-                console.log("Stock Management Service - Update");
-
-                // TODO
-
-                break;
-
-            // Delete a product
-            case "/delete":
+            // Take from the stock number for a product i.e. if one is sold
+            case "/decrementStock":
 
                 console.log("Stock Management Service - Delete");
 
                 // TODO
 
                 break;
+        }
+    }
+    else
+    {
+        switch (path)
+        {
+            // Get the current stock numbers for each product
+            case "currentStock":
 
-            // Make a product inactive so it doesn't appear in the UI
-            case "/deactivate":
+                // TODO
 
-                console.log("Stock Management Service - Deactivate");
+                break;
+
+            // Get the top 5 best sellers
+            case "bestSellers":
 
                 // TODO
 
                 break;
         }
     }
-   
 
 });
 server.listen(3004);
