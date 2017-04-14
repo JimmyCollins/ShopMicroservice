@@ -1,20 +1,21 @@
-var express = require("express")
-    , morgan = require("morgan")
-    , path = require("path")
-    , bodyParser = require("body-parser")
+var express = require("express");
+var morgan = require("morgan");
+var path = require("path");
+var bodyParser = require("body-parser");
 
-    , app = express();
-
+var app = express();
 
 app.use(morgan('combined'));
 app.use(morgan("dev", {}));
 app.use(bodyParser.json());
 
-//app.use(morgan("dev", {}));
 var cart = [];
 
-app.post("/add", function (req, res, next) {
-
+/**
+ * Add an item to the cart
+ */
+app.post("/add", function (req, res, next)
+{
     var obj = req.body;
     console.log("add ");
     console.log("Attempting to add to cart: " + JSON.stringify(req.body));
@@ -32,7 +33,7 @@ app.post("/add", function (req, res, next) {
     {
         if(c[i].productID === obj.productID)
         {
-            console.log("Already a product with that ID in the cart!")
+            console.log("Already a product with that ID in the cart!");
             c[i].quantity = Number(c[i].quantity) + Number(obj.quantity);
             res.send(201);
             return;
@@ -61,12 +62,14 @@ app.post("/add", function (req, res, next) {
 
     res.send("");
 
-
 });
 
 
-app.delete("/cart/:custId/items/:id", function (req, res, next) {
-
+/**
+ * Delete an item from the cart
+ */
+app.delete("/cart/:custId/items/:id", function (req, res, next)
+{
     var body = '';
     console.log("Delete item from cart: for custId " + req.url + ' ' +  req.params.id.toString());
 
@@ -92,15 +95,15 @@ app.delete("/cart/:custId/items/:id", function (req, res, next) {
 });
 
 
-app.get("/cart/:custId/items/", function (req, res, next) {
-
-
+/**
+ * Get the contents of this customers cart
+ */
+app.get("/cart/:custId/items/", function (req, res, next)
+{
     var custId = req.params.custId;
     console.log("getCart" + custId);
 
-
     console.log('custID ' + custId);
-
 
     console.log(JSON.stringify(cart["" + custId], null, 2));
 
@@ -110,7 +113,8 @@ app.get("/cart/:custId/items/", function (req, res, next) {
 });
 
 
-var server = app.listen(process.env.PORT || 3003, function () {
+var server = app.listen(process.env.PORT || 3003, function ()
+{
     var port = server.address().port;
     console.log("App now running in %s mode on port %d", app.get("env"), port);
 });
