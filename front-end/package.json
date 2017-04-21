@@ -1,8 +1,9 @@
 {
-  "name": "frontend",
-  "version": "0.0.1",
-  "description": "Front end shop.",
-
+  "name": "front-end",
+  "version": "1.0.0",
+  "description": "Front-end service",
+  "author": "Jimmy Collins",
+  "main": "server.js",
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "^1.15.1",
@@ -24,5 +25,8 @@
     "mocha-junit-reporter": "^1.12.1",
     "istanbul": "^0.4.4",
     "mongodb": "^2.2.5"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
