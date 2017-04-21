@@ -1,7 +1,13 @@
 {
-  "name": "node-api",
-  "main": "server.js",
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "User service",
+  "author": "Jimmy Collins",
+  "main": "app.js",
   "dependencies": {
     "mysql": "^2.13.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }

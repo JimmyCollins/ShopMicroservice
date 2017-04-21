@@ -142,3 +142,4 @@ var server = http.createServer(function (request, response)
 
 });
 server.listen(3001);
+console.log("Users service running on Port 3001");
