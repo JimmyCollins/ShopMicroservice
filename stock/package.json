@@ -1,7 +1,13 @@
 {
-  "name": "stock",
+  "name": "stock-service",
+  "version": "1.0.0",
+  "description": "Stock service",
+  "author": "Jimmy Collins",
   "main": "app.js",
   "dependencies": {
     "mysql": "^2.13.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }
