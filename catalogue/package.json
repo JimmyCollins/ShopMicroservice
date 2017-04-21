@@ -1,7 +1,12 @@
 {
-    "name": "node-api",
-    "main": "server.js",
+    "name": "catalogue-service",
+    "version": "1.0.0",
+    "description": "Catalogue service",
+    "author": "Jimmy Collins",
+    "main": "app.js",
     "dependencies": {
-       
+    },
+    "scripts": {
+        "start": "node app.js"
     }
 }
