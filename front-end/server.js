@@ -6,7 +6,7 @@ var request      = require("request")
   , async        = require("async")
   , cookieParser = require("cookie-parser")
   , session      = require("express-session")
-  , epimetheus   = require("epimetheus")
+  //, epimetheus   = require("epimetheus")
   , config       = require("./config")
   , helpers      = require("./helpers")
   , cart         = require("./api/cart")
@@ -16,7 +16,7 @@ var request      = require("request")
   , app          = express()
 
 //app.use(express.logger());
-epimetheus.instrument(app);
+//epimetheus.instrument(app);
 app.use(morgan('combined'));
 app.use(morgan("dev", {}));
 app.use(express.static("public"));
