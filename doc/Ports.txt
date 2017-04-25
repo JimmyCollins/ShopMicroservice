@@ -1,5 +1,0 @@
-users - 3001
-catalogue - 3002
-cart - 3003
-front-end - 8079
-stock - 3004

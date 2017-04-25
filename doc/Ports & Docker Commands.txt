@@ -1,0 +1,34 @@
+users - 3001
+catalogue - 3002
+cart - 3003
+front-end - 8079
+stock - 3004
+
+
+Commands to setup docker images:
+
+Start MYSQL:
+
+docker run -p 3306:3306 --name shopdb2 -e MYSQL_ROOT_PASSWORD=root -d jimmyc/mysql
+
+(do i need to create the mysql database again - resave docker image after adding tables and try next time..)
+
+TODO - Are the below right - do we need to run a specific command to ensure the containers that need to talk to MYSQL can? >> see “Connect to MySQL from an application in another Docker container” at this link - https://hub.docker.com/_/mysql/.
+
+
+Start the services:
+
+docker run -p 3001:3001 -d jimmyc/user-service
+docker run -p 3002:3002 -d jimmyc/catalogue-service
+docker run -p 3003:3003 -d jimmyc/cart-service
+docker run -p 3004:3004 -d jimmyc/stock-service
+docker run -p 8079:8079 -d jimmyc/front-end
+
+Still an error right now:
+
+Error: connect ECONNREFUSED 127.0.0.1:3002
+    at Object.exports._errnoException (util.js:1018:11)
+    at exports._exceptionWithHostPort (util.js:1041:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1090:14)
+
+Try to fix as per TODO above?
