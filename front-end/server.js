@@ -11,7 +11,8 @@ var request      = require("request")
   , helpers      = require("./helpers")
   , cart         = require("./api/cart")
   , catalogue    = require("./api/catalogue")
-  , orders       = require("./api/orders")
+  , stock    = require("./api/stock")
+  //, orders       = require("./api/orders")
   , user         = require("./api/user")
   , app          = express()
 
@@ -42,8 +43,9 @@ process.argv.forEach(function (val, index, array) {
 /* Mount API endpoints */
 app.use(cart);
 app.use(catalogue);
-app.use(orders);
+//app.use(orders);
 app.use(user);
+app.use(stock);
 
 var server = app.listen(process.env.PORT || 8079, function () {
   var port = server.address().port;

@@ -17,9 +17,9 @@
         var headers = ["Product Name", "Price", "Picture", "Quantity", ""];
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
 
-        $(document).ready(function () {
+        /*$(document).ready(function () {
 
-        });
+        });*/
 
 
         /**
@@ -63,8 +63,9 @@
          */
         function hideAll()
         {
-            $("#login").hide();
-            $("#register").hide();
+            //$("#login").hide();
+            //$("#register").hide();
+            $("#loginOrRegister").hide();
             $("#newProduct").hide();
             $("#products").hide();
             $("#cart").hide();
@@ -78,6 +79,13 @@
         {
             hideAll();
             $("#login").show();
+        }
+
+
+        function showLoginOrRegister()
+        {
+            hideAll();
+            $("#loginOrRegister").show();
         }
 
 
@@ -127,6 +135,10 @@
 
                     $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Car added to cart successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
 
+                    setTimeout(function() {
+                        $(".alert").alert('close');
+                    }, 2000);
+
                 }
             });
         }
@@ -159,6 +171,13 @@
                 url: '/cart/' + count,
                 type: 'DELETE',
                 success: function(result) {
+
+                    $('#alertarea').html("<div class='alert alert-info alert-dismissable'>Item deleted from Cart.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                    setTimeout(function() {
+                        $(".alert").alert('close');
+                    }, 2000);
+
                     getCart();
                 }
             });
@@ -313,11 +332,24 @@
                     success: function () {
 
                         //$("#alertarea").show();
-                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Logged in Successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+                        var obj = $.parseJSON(fd);
+
+                        $('#alertarea').html("<div class='alert alert-success alert-dismissible'>Logged in Successfully." + obj['name'] +
+                            "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                        setTimeout(function() {
+                            $(".alert").alert('close');
+                        }, 2000);
 
                     }
+
+                    // TODO: is there a similar 'failure' clause i could put in here and show a red alert?
                 });
             });
+
+            /*$(".alert-dismissible").fadeTo(2000, 500).slideUp(500, function(){
+                $(".alert-dismissible").alert('close');
+            });*/
 
             // Handler for when someone registers
             $('#registerForm').on( "submit",function(event)
@@ -348,6 +380,10 @@
 
                         //$("#alertarea").show();
                         $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Thanks for registering!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                        setTimeout(function() {
+                            $(".alert").alert('close');
+                        }, 2000);
                     }
                 });
 
@@ -361,22 +397,44 @@
                 var fd = $('#newProductForm').serialize();
 
                 $.post(
-                        "http://localhost:3002/newProduct",
+                        "http://localhost:3002/newProduct",  // JC FIXME: Should go through 'wrapper' located in 'api'.
                         fd,
                         function (data) {
                             console.log(data);
                             //$('#logonmessage').html(data);
                             //$("#alertarea").show();
                             $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                            setTimeout(function() {
+                                $(".alert").alert('close');
+                            }, 2000);
                         }
                 );
 
 
             });
 
+            // Used for the login/registration forms
+            $('#login-form-link').click(function(e) {
+                $("#logonForm").delay(100).fadeIn(100);
+                $("#registerForm").fadeOut(100);
+                $('#register-form-link').removeClass('active');
+                $(this).addClass('active');
+                e.preventDefault();
+            });
+            $('#register-form-link').click(function(e) {
+                $("#registerForm").delay(100).fadeIn(100);
+                $("#logonForm").fadeOut(100);
+                $('#login-form-link').removeClass('active');
+                $(this).addClass('active');
+                e.preventDefault();
+            });
+
+
             getProducts();
-            $("#login").hide();
-            $('#register').hide();
+            //$("#login").hide();
+            //$('#register').hide();
+            $('#loginOrRegister').hide();
             $("#newProduct").hide();
 
         });
@@ -394,20 +452,22 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+
+            <!-- The main navigation bar -->
             <nav class="navbar navbar-default">
                 <div class="container-fluid" style="text-align: center">
                     <ul class="nav navbar-nav">
+                        <li>
+                            <a onclick="showLoginOrRegister()">Login or Register</a>
+                        </li>
+                        <!--<li>
+                            <a onclick="showRegister()">Register</a>
+                        </li>-->
                         <li>
                             <a onclick="getProducts()">Show Cars</a>
                         </li>
                         <li>
                             <a onclick="getCart()">Show Cart</a>
-                        </li>
-                        <li>
-                            <a onclick="showLogin()">Login</a>
-                        </li>
-                        <li>
-                            <a onclick="showRegister()">Register</a>
                         </li>
                         <li>
                             <a onclick="showNewProduct()">New Product</a>
@@ -419,10 +479,10 @@
             <div id="alertarea"></div>
             <div id="cart"></div>
             <div id="products"></div>
-            <div id="logonmessage"></div>
+            <!--<div id="logonmessage"></div>-->
 
             <!-- Login UI -->
-            <div id="login">
+            <!--<div id="login">
                 <h1>Login</h1>
                 <p>
 
@@ -439,10 +499,88 @@
                         <input type="submit" class="btn btn-primary">
                     </div>
                 </form>
+            </div>-->
+
+            <!-- The Login / Registration form -->
+            <!-- REF: http://bootsnipp.com/snippets/featured/login-and-register-tabbed-form -->
+            <div id="loginOrRegister" class="container">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="panel panel-login">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a href="#" class="active" id="login-form-link">Login</a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <a href="#" id="register-form-link">Register</a>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form id="logonForm" action="" method="post" role="form" style="display: block;">
+                                            <div class="form-group">
+                                                <input type="text" name="name" id="usernameLogonForm" tabindex="1" class="form-control" placeholder="Username" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="password" id="passwordLogonForm" tabindex="2" class="form-control" placeholder="Password">
+                                            </div>
+                                            <!--<div class="form-group text-center">
+                                                <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+                                                <label for="remember"> Remember Me</label>
+                                            </div>-->
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-logon" value="Log In">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--<div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="text-center">
+                                                            <a href="http://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+                                        </form>
+                                        <form id="registerForm" action="" method="post" role="form" style="display: none;">
+                                            <div class="form-group">
+                                                <input type="text" name="name" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+
             <!-- Registration UI -->
-            <div id="register">
+            <!--<div id="register">
                 <h1>Register</h1>
                 <p>
 
@@ -460,7 +598,7 @@
                     <br>
                     <input type="submit" class="btn btn-primary">
                 </form>
-            </div>
+            </div>-->
 
             <!-- New Product UI -->
             <div id="newProduct">
