@@ -11,7 +11,7 @@ Start MYSQL:
 
 docker run -p 3306:3306 --name shopdb2 -e MYSQL_ROOT_PASSWORD=root -d jimmyc/mysql
 
-(do i need to create the mysql database again - resave docker image after adding tables and try next time..)
+(do i need to create the mysql database again - resave docker image after adding tables and try next time..) - YES
 
 TODO - Are the below right - do we need to run a specific command to ensure the containers that need to talk to MYSQL can? >> see “Connect to MySQL from an application in another Docker container” at this link - https://hub.docker.com/_/mysql/.
 
@@ -43,3 +43,25 @@ Fixed issue with front-end trying to contact catalogie on localhost (set catalog
 Now looks like the catalog service is trying to contact the DB on localhost, going to try changing DB IP to 192.168.99.100 in catalogue service code.
 
 Fixed - anyway around hard coding the docker container IP's in the code?
+
+27/04
+
+Updated Steps to run in local Docker containers.
+
+1. Start the MySQL Container via:
+
+docker run -p 3306:3306 --name shopdb2 -e MYSQL_ROOT_PASSWORD=root -d jimmyc/mysql
+
+Connect to this MySQL instance and execute the SQL to setup the database.
+
+NOTE - at this point I'm still changing the IP's in each of the services to match the default docker one - 192.168.99.100 - how will I handle this when deploying to AWS??
+
+2. Start all other services:
+
+docker run -p 3001:3001 -d jimmyc/user-service
+docker run -p 3003:3003 -d jimmyc/cart-service
+docker run -p 3004:3004 -d jimmyc/stock-service
+docker run -p 8079:8079 -d jimmyc/front-end
+docker run -p 3002:3002 -d jimmyc/catalogue-service
+
+3. Navigate to http://192.168.99.100:8079 to test.
