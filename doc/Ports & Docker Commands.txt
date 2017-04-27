@@ -19,10 +19,13 @@ TODO - Are the below right - do we need to run a specific command to ensure the 
 Start the services:
 
 docker run -p 3001:3001 -d jimmyc/user-service
-docker run -p 3002:3002 -d jimmyc/catalogue-service
 docker run -p 3003:3003 -d jimmyc/cart-service
 docker run -p 3004:3004 -d jimmyc/stock-service
 docker run -p 8079:8079 -d jimmyc/front-end
+docker run -p 3002:3002 -d jimmyc/catalogue-service
+
+
+25/04
 
 Still an error right now:
 
@@ -32,3 +35,11 @@ Error: connect ECONNREFUSED 127.0.0.1:3002
     at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1090:14)
 
 Try to fix as per TODO above?
+
+26/04
+
+Fixed issue with front-end trying to contact catalogie on localhost (set catalogue ip to 192.168.99.100 in front-end code).
+
+Now looks like the catalog service is trying to contact the DB on localhost, going to try changing DB IP to 192.168.99.100 in catalogue service code.
+
+Fixed - anyway around hard coding the docker container IP's in the code?
