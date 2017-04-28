@@ -23,8 +23,8 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    console.log("path: "+path);
-    console.log("url: "+url1)
+    //console.log("path: "+path);
+    //console.log("url: "+url1)
 
     if (request.method == 'POST')
     {
@@ -33,15 +33,18 @@ var server = http.createServer(function (request, response)
             // Login functionality
             case "/login":
                 var body = '';
-                console.log("user Login ");
+                //console.log("user Login ");
                 request.on('data', function (data) {
                     body += data;
                 });
 
                 request.on('end', function () {
+
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM users where name='" + obj.name + "'";
+
+                    var query = "SELECT * FROM users where name='" + obj.name + "' AND password='" + obj.password + "'";
+
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });

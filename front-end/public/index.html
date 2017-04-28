@@ -64,8 +64,8 @@
         function hideAll()
         {
             //$("#login").hide();
-            //$("#register").hide();
-            $("#loginOrRegister").hide();
+            $("#register").hide();
+            //$("#loginOrRegister").hide();
             $("#newProduct").hide();
             $("#products").hide();
             $("#cart").hide();
@@ -188,11 +188,11 @@
          * TODO - Is this used anywhere?
          * @param itemNo
          */
-        function myFunction(itemNo)
+        /*function myFunction(itemNo)
         {
             str = JSON.stringify(products[itemNo]);
             window.alert("You selected " + str);
-        }
+        }*/
 
 
         /**
@@ -304,20 +304,27 @@
             $('#logonForm').on( "submit",function(event) {
 
                 event.preventDefault();
-                $("#login").hide();
+                //$("#login").hide();
 
                 var o={};
 
                 var a = $('#logonForm').serializeArray();
                 $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
+
+                    if (o[this.name] !== undefined)
+                    {
+                        if (!o[this.name].push)
+                        {
                             o[this.name] = [o[this.name]];
                         }
                         o[this.name].push(this.value || '');
-                    } else {
+
+                    }
+                    else
+                    {
                         o[this.name] = this.value || '';
                     }
+
                 });
 
                 var fd =JSON.stringify(o);
@@ -334,12 +341,33 @@
                         //$("#alertarea").show();
                         var obj = $.parseJSON(fd);
 
+
+                        // Set the name of the logged in user
+                        $('#logged-in-text').text('Logged in as ' + obj['name']);
+
+                        $("#login-dp").hide();
+                        $("#login-area").hide();
+
+
                         $('#alertarea').html("<div class='alert alert-success alert-dismissible'>Logged in Successfully." + obj['name'] +
                             "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
 
                         setTimeout(function() {
                             $(".alert").alert('close');
                         }, 2000);
+
+                    },
+
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                        $('#alertarea').html("<div class='alert alert-danger alert-dismissible'>Please input a valid username and password.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                        setTimeout(function() {
+                            $(".alert").alert('close');
+                        }, 5000);
+
+
+                        //alert("Status: " + textStatus); alert("Error: " + errorThrown);
 
                     }
 
@@ -379,7 +407,7 @@
                     success: function () {
 
                         //$("#alertarea").show();
-                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Thanks for registering!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Thanks for registering! Please login on the top left.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
 
                         setTimeout(function() {
                             $(".alert").alert('close');
@@ -415,7 +443,7 @@
             });
 
             // Used for the login/registration forms
-            $('#login-form-link').click(function(e) {
+            /*$('#login-form-link').click(function(e) {
                 $("#logonForm").delay(100).fadeIn(100);
                 $("#registerForm").fadeOut(100);
                 $('#register-form-link').removeClass('active');
@@ -428,7 +456,7 @@
                 $('#login-form-link').removeClass('active');
                 $(this).addClass('active');
                 e.preventDefault();
-            });
+            });*/
 
 
             getProducts();
@@ -446,23 +474,20 @@
 
 <div class="container-fluid">
 
-    <header>
+    <!--<header>
         <h1>Car Dealership</h1>
-    </header>
+    </header>-->
 
     <div class="panel panel-default">
         <div class="panel-body">
 
-            <!-- The main navigation bar -->
+            <!-- The main navigation bar
             <nav class="navbar navbar-default">
                 <div class="container-fluid" style="text-align: center">
                     <ul class="nav navbar-nav">
                         <li>
                             <a onclick="showLoginOrRegister()">Login or Register</a>
                         </li>
-                        <!--<li>
-                            <a onclick="showRegister()">Register</a>
-                        </li>-->
                         <li>
                             <a onclick="getProducts()">Show Cars</a>
                         </li>
@@ -474,6 +499,95 @@
                         </li>
                     </ul>
                 </div>
+            </nav>-->
+
+            <!-- REF: http://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form -->
+            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Car Dealership</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a onclick="getProducts()">Show Cars</a></li>
+                            <li><a onclick="getCart()">Show Cart</a></li>
+
+                            <!-- TODO - only show if Admin user -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Administration<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a onclick="showNewProduct()">New Product</a></li>
+                                    <!--<li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">One more separated link</a></li>-->
+                                </ul>
+                            </li>
+
+                        </ul>
+
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><p class="navbar-text" id="logged-in-text"><b>Already have an account?</b></p></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" id="login-area" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <!--Login via
+                                                <div class="social-buttons">
+                                                    <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+                                                    <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+                                                </div>
+                                                or-->
+                                                <form class="form" role="form" method="post" action="" accept-charset="UTF-8" id="logonForm">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="usernameLogonForm">Email address</label>
+                                                        <input type="text" name="name" class="form-control" id="usernameLogonForm" placeholder="Username" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="passwordLogonForm">Password</label>
+                                                        <input type="password" name="password" class="form-control" id="passwordLogonForm" placeholder="Password" required>
+                                                        <!--<div class="help-block text-right"><a href="">Forget the password ?</a></div>-->
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                                    </div>
+                                                    <!--<div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox"> keep me logged-in
+                                                        </label>
+                                                    </div>-->
+                                                </form>
+                                            </div>
+                                            <div class="bottom text-center">
+                                                New here? <a onclick="showRegister()">Join Us</a></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
             </nav>
 
             <div id="alertarea"></div>
@@ -501,86 +615,11 @@
                 </form>
             </div>-->
 
-            <!-- The Login / Registration form -->
-            <!-- REF: http://bootsnipp.com/snippets/featured/login-and-register-tabbed-form -->
-            <div id="loginOrRegister" class="container">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <div class="panel panel-login">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <a href="#" class="active" id="login-form-link">Login</a>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <a href="#" id="register-form-link">Register</a>
-                                    </div>
-                                </div>
-                                <hr>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <form id="logonForm" action="" method="post" role="form" style="display: block;">
-                                            <div class="form-group">
-                                                <input type="text" name="name" id="usernameLogonForm" tabindex="1" class="form-control" placeholder="Username" value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="password" name="password" id="passwordLogonForm" tabindex="2" class="form-control" placeholder="Password">
-                                            </div>
-                                            <!--<div class="form-group text-center">
-                                                <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                                                <label for="remember"> Remember Me</label>
-                                            </div>-->
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-sm-6 col-sm-offset-3">
-                                                        <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-logon" value="Log In">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--<div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="text-center">
-                                                            <a href="http://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>-->
-                                        </form>
-                                        <form id="registerForm" action="" method="post" role="form" style="display: none;">
-                                            <div class="form-group">
-                                                <input type="text" name="name" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-sm-6 col-sm-offset-3">
-                                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- REG FORM WAS HERE -->
 
 
             <!-- Registration UI -->
-            <!--<div id="register">
+            <div id="register">
                 <h1>Register</h1>
                 <p>
 
@@ -598,6 +637,36 @@
                     <br>
                     <input type="submit" class="btn btn-primary">
                 </form>
+            </div>
+
+            <!--<div id="register">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <form id="registerForm" action="" method="post" role="form" style="display: none;">
+                            <div class="form-group">
+                                <input type="text" name="name" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>-->
 
             <!-- New Product UI -->
