@@ -246,6 +246,9 @@
          */
         function displayCart(cart, name)
         {
+            console.log("displayCart:" + cart);
+            console.log("displayCart:" + name);
+
             var out = '<div class="panel panel-default">';
 
             out += '<div class="panel-heading">Shopping Cart Contents</div>';
@@ -341,6 +344,8 @@
                         //$("#alertarea").show();
                         var obj = $.parseJSON(fd);
 
+                        // Set the customer ID in the session?
+                        //req.session.customerId
 
                         // Set the name of the logged in user
                         $('#logged-in-text').text('Logged in as ' + obj['name']);

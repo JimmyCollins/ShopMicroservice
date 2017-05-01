@@ -86,22 +86,35 @@
 
   /* TODO: Add documentation */
   helpers.getCustomerId = function(req, env) {
+
+    console.log("helpers/index - getCustomerId");
+
     // Check if logged in. Get customer Id
     var logged_in = req.cookies.logged_in;
 
     // TODO REMOVE THIS, SECURITY RISK
-    if (env == "development" && req.query.custId != null) {
+    /*if (env == "development" && req.query.custId != null)
+    {
+      console.log("dev env - returning: " + req.query.custId);
       return req.query.custId;
-    }
+    }*/
 
-    if (!logged_in) {
-      if (!req.session.id) {
+    if (!logged_in)
+    {
+        console.log("user is not logged in");
+
+      if (!req.session.id)
+      {
+        console.log("no session id?");
         throw new Error("User not logged in.");
       }
+
       // Use Session ID instead
+        console.log("returning :" + req.session.id);
       return req.session.id;
     }
 
+    console.log("helpers/index - getCustomerId - returning: " + req.session.customerId);
     return req.session.customerId;
   }
   module.exports = helpers;

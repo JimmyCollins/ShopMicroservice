@@ -17,7 +17,7 @@ var cart = [];
 app.post("/add", function (req, res, next)
 {
     var obj = req.body;
-    console.log("add ");
+    console.log("Customer: " + obj.custId);
     console.log("Attempting to add to cart: " + JSON.stringify(req.body));
 
     var max = 0;

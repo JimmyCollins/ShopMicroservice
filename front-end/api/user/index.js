@@ -188,26 +188,34 @@
         };
 
         console.log("Posting Customer: " + JSON.stringify(req.body));
+
         request(options, function(error, response, body) {
-            if (error !== null ) {
+
+            if (error !== null )
+            {
                 console.log("error "+JSON.stringify(error));
                 return;
             }
-            if (response.statusCode == 200 &&
-                body != null && body != "") {
-           //     body = JSON.parse(body);
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
                 console.log('body '+JSON.stringify(body))
-                if (body.error) {
+
+                if (body.error)
+                {
                     console.log("Error with log in: " + body.error);
                     res.status(500);
                     res.end();
                     return;
                 }
+
                 console.log(body);
-                var customerId = body.id;
-                console.log('cust id ' +customerId);
+
+                var customerId = body.customerId;
+                console.log('cust id: ' +customerId);
+
                 req.session.customerId = customerId;
-                console.log("set cookie" + customerId);
+                console.log("set cookie: " + customerId);
                 res.status(200);
                 res.cookie(cookie_name, req.session.id, {
                     maxAge: 3600000

@@ -61,9 +61,9 @@ var server = http.createServer(function (request, response)
                             if (rows!=null && rows.length>0)
                             {
                                 console.log("User is in the database" );
-                                theuserid = rows[0].customerID;
+                                theuserid = rows[0].userID;
                                 var obj = {
-                                    id: theuserid
+                                    customerId: theuserid
                                 }
                                 response.end(JSON.stringify(obj));
 

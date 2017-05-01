@@ -118,6 +118,8 @@
     }
 
     var custId = helpers.getCustomerId(req, app.get("env"));
+    console.log("app.delete in api/cart - custId - " + custId);
+
     var qty = req.body.qty;
     async.waterfall([
         function (callback) {
@@ -142,7 +144,8 @@
             uri: endpoints.cartsUrl + "/add",
             method: 'POST',
             json: true,
-            body: {custId: custId,
+            body: {
+                custId: custId,
               productID : item.productID,
               price: item.price,
               quantity : qty,
