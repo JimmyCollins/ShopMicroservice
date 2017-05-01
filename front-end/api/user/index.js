@@ -7,7 +7,7 @@
         endpoints = require("../endpoints"),
         helpers = require("../../helpers"),
         app = express(),
-        cookie_name = "logged_in"
+        cookie_name = "super-carz"
 
 
     app.get("/customers/:id", function(req, res, next) {
@@ -209,17 +209,25 @@
                     return;
                 }
 
-                console.log(body);
+                //console.log(body);
 
                 var customerId = body.customerId;
-                console.log('cust id: ' +customerId);
+                var usertype = body.usertype;
+
+                console.log('user id: ' + customerId);
+                console.log('user type: ' + usertype);
 
                 req.session.customerId = customerId;
+                req.session.usertype = usertype;
+
                 console.log("set cookie: " + customerId);
+
                 res.status(200);
+
                 res.cookie(cookie_name, req.session.id, {
-                    maxAge: 3600000
+                    maxAge: 14400000
                 }).send({id: customerId});
+
                 console.log("Sent cookies.");
                 res.end();
                 return;

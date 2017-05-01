@@ -82,11 +82,11 @@
         }
 
 
-        function showLoginOrRegister()
+        /*function showLoginOrRegister()
         {
             hideAll();
             $("#loginOrRegister").show();
-        }
+        }*/
 
 
         /**
@@ -146,12 +146,41 @@
 
         /**
          * Checkout functionality - probably goes to the cart service?
+         * @param cart The contents of the current cart
          */
         function checkout()
         {
-            $.post("/checkout",
+            // TODO - Where to get current cart data from?
+            // Can't seem to pass as a parameter?
+            // Get from cart service?
+
+            // Testing
+            //console.log("cart var - " + cart);
+            //console.log("in checkout, cart items are:");
+
+            // TODO - Add to confirmation model??
+
+
+
+            /*for (i = 0; i < cart.length; i++)
+            {
+                console.log("Name: " + cart[i].name);
+                console.log("Price: " + cart[i].price);
+            }*/
+
+            $.post("/orders",
                 {
                     // TODO
+
+
+                    /**
+                     * Get the details of what is in the cart
+                     * Call into the orders service (via orders\index.js) that should:
+                     *  1. update the 'orders' table - high level info
+                     *  2. update the 'orderdetails' table - adds the details on the actual orders
+                     *
+                     */
+
                 },
                 function (data) {
                     $('#cartmessage').html(data);
@@ -361,6 +390,13 @@
                             $(".alert").alert('close');
                         }, 2000);
 
+                        // TODO: How to retain login after page refresh?
+
+                        // TODO: How to get usertype of logged in user an if=1 show admin pages?
+
+                        // TODO: Should see a View Orders button when user logs in also, that can be used to query for current orders (via the orders service)
+                        $("#view-orders").show();
+
                     },
 
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -376,7 +412,6 @@
 
                     }
 
-                    // TODO: is there a similar 'failure' clause i could put in here and show a red alert?
                 });
             });
 
@@ -464,11 +499,13 @@
             });*/
 
 
+            //
             getProducts();
+            $("#view-orders").hide();
             //$("#login").hide();
             //$('#register').hide();
-            $('#loginOrRegister').hide();
-            $("#newProduct").hide();
+            //$('#loginOrRegister').hide();
+            //$("#newProduct").hide();
 
         });
     </script>
@@ -517,7 +554,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Car Dealership</a>
+                        <a class="navbar-brand" href="#">Super Carz</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -550,6 +587,7 @@
                         </form>
 
                         <ul class="nav navbar-nav navbar-right">
+                            <li><p class="navbar-text" id="view-orders"><b><a href="#">View Orders</a></b></p></li>
                             <li><p class="navbar-text" id="logged-in-text"><b>Already have an account?</b></p></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" id="login-area" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>

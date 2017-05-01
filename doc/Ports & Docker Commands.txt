@@ -3,6 +3,7 @@ catalogue - 3002
 cart - 3003
 front-end - 8079
 stock - 3004
+orders - 3005
 
 
 Commands to setup docker images:

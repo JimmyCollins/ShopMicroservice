@@ -1,3 +1,53 @@
+(function (){
+    'use strict';
+
+    var express   = require("express")
+        , request   = require("request")
+        , endpoints = require("../endpoints")
+        , helpers   = require("../../helpers")
+        , app       = express()
+
+    //var url = endpoints.ordersUrl + req.url.toString();
+
+    // TODO: Implement Order Service Wrapper Calls - some ref below
+
+
+
+    // Get a particular users orders
+    app.get("/orders", function (req, res, next)
+    {
+        console.log("Routing to Orders Service - Getting Orders");
+
+        var options = {
+            uri: endpoints.ordersUrl,
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Posting New Order to Orders Service: " + JSON.stringify(req.body));
+
+        // TODO
+
+    });
+
+
+    // Add a new order
+    app.post("/orders", function(req, res, next)
+    {
+        console.log("Routing to Orders Service - Adding Order");
+
+        // TODO
+    });
+
+
+
+
+
+
+    module.exports = app;
+}());
+
 /*(function (){
   'use strict';
 
