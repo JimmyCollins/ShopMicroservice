@@ -11,13 +11,9 @@
 
     // TODO: Implement Order Service Wrapper Calls - some ref below
 
-
-
-    // Get a particular users orders
-    app.get("/orders", function (req, res, next)
+    // Add a new order
+    app.post("/order", function(req, res, next)
     {
-        console.log("Routing to Orders Service - Getting Orders");
-
         var options = {
             uri: endpoints.ordersUrl,
             method: 'POST',
@@ -27,18 +23,47 @@
 
         console.log("Posting New Order to Orders Service: " + JSON.stringify(req.body));
 
-        // TODO
+        request(options, function(error, response, body) {
 
+            if (error !== null )
+            {
+                console.log("error with ordering "+JSON.stringify(error));
+                return;
+            }
+
+
+            // TODO??
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                console.log('order body '+JSON.stringify(body))
+                res.status(200);
+                res.end;
+
+            }
+
+
+            console.log("Done ending order to orders service...");
+
+        });
+
+        // TODO
     });
 
 
-    // Add a new order
-    app.post("/orders", function(req, res, next)
+
+
+    // Get a particular users orders
+    app.get("/order", function (req, res, next)
     {
-        console.log("Routing to Orders Service - Adding Order");
+        console.log("Routing to Orders Service - Getting Orders");
 
         // TODO
+
     });
+
+
+
 
 
 

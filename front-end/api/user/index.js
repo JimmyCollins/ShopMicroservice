@@ -7,7 +7,9 @@
         endpoints = require("../endpoints"),
         helpers = require("../../helpers"),
         app = express(),
-        cookie_name = "super-carz"
+        logged_in = "logged_in",
+        user_type = "user_type",
+        customer_id = "customer_id"
 
 
     app.get("/customers/:id", function(req, res, next) {
@@ -220,13 +222,36 @@
                 req.session.customerId = customerId;
                 req.session.usertype = usertype;
 
-                console.log("set cookie: " + customerId);
+                //console.log("set cookie: " + customerId);
+
+                // TODO: Original Cookie code - delete later
+                /*res.cookie(logged_in, req.session.id, {
+                    maxAge: 14400000
+                }).send({id: customerId});*/
+
+                // Set some cookies we need
+
+                // The session ID
+                res.cookie(logged_in, req.session.id, {
+                    maxAge: 14400000
+                });
+
+                // The customer ID
+                res.cookie(customer_id, req.session.customerId, {
+                    maxAge: 14400000
+                });
+
+                // The user type
+                res.cookie(user_type, req.session.usertype, {
+                    maxAge: 14400000
+                });
 
                 res.status(200);
 
-                res.cookie(cookie_name, req.session.id, {
+                /*res.cookie(user_type , req.session.id, {
                     maxAge: 14400000
-                }).send({id: customerId});
+                }).send({id: usertype});*/
+
 
                 console.log("Sent cookies.");
                 res.end();
