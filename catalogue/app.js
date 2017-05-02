@@ -90,7 +90,7 @@ var server = http.createServer(function (request, response)
                     'Content-Type': 'text/html',
                     'Access-Control-Allow-Origin': '*'
                 });
-                var query = "SELECT * FROM products ";
+                var query = "SELECT * FROM products ";  // TODO: Where active is 1
 
                 db.query(
                     query,
