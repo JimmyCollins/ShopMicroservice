@@ -1,0 +1,17 @@
+{
+	"order": [{
+			"customerId": "5",
+			"productId": 1,
+			"name": "Car 1",
+			"price": 0.48,
+			"quantity": "1"
+		},
+		{
+			"customerId": "5",
+			"productId": 2,
+			"name": "Car 2",
+			"price": 0.99,
+			"quantity": "2"
+		}
+	]
+}

@@ -25,6 +25,8 @@
 
         request(options, function(error, response, body) {
 
+            console.log("Sending request...");
+
             if (error !== null )
             {
                 console.log("error with ordering "+JSON.stringify(error));
@@ -37,8 +39,18 @@
             if (response.statusCode == 200 && body != null && body != "")
             {
                 console.log('order body '+JSON.stringify(body))
+
+                if (body.error)
+                {
+                    console.log("Error with ordering: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
                 res.status(200);
                 res.end;
+                return;
 
             }
 

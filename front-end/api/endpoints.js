@@ -16,10 +16,10 @@
       registerUrl:   "http://localhost:3001/register",
 
       // Stock Service
-      stockUrl:      "http://localhost:3004/",
+      stockUrl:      "http://localhost:3004",
 
       // Orders Service
-      ordersUrl:     "http://localhost:3005/",
+      ordersUrl:     "http://localhost:3005",
 
       // Unused / Not Implemented - DELETE BEFORE SUBMISSION
       tagsUrl:       "http://localhost:8082/catalogue/tags",
