@@ -19,8 +19,8 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    console.log("path: "+path);
-    console.log("url: "+url1);
+    //console.log("path: "+path);
+    //console.log("url: "+url1);
 
     if (request.method == 'POST')
     {
@@ -54,7 +54,7 @@ var server = http.createServer(function (request, response)
                     var ordersQuery = "INSERT into orders (customerId, saledate)" +
                             " VALUES (" + orderData.customerId +",'" + saleDate + "')";
 
-                    //console.log(ordersQuery);
+                    console.log(ordersQuery);
 
                     db.query(ordersQuery, function(err, result)
                     {
@@ -76,7 +76,7 @@ var server = http.createServer(function (request, response)
                             var orderDetailsQuery = "INSERT into orderdetails (orderID, productID, quantity)" +
                                 "VALUES (" + orderId + "," + productId + "," + quantity +")";
 
-                            //console.log(orderDetailsQuery);
+                            console.log(orderDetailsQuery);
 
                             db.query(orderDetailsQuery, function(err, result)
                             {
@@ -89,9 +89,14 @@ var server = http.createServer(function (request, response)
 
                         }
 
+                        console.log("ending...");
+                        //response.statusCode =  200;
+                        //response.writeHead(200);
+                        response.end();
+
                     });
 
-                    response.end();
+
 
                     // TODO: Call into Stock service to decrement stock levels for these products?
 

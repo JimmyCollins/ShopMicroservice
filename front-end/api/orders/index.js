@@ -15,7 +15,7 @@
     app.post("/order", function(req, res, next)
     {
         var options = {
-            uri: endpoints.ordersUrl,
+            uri: endpoints.ordersUrl + "order",
             method: 'POST',
             json: true,
             body: req.body
@@ -30,11 +30,9 @@
             if (error !== null )
             {
                 console.log("error with ordering "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
                 return;
             }
-
-
-            // TODO??
 
             if (response.statusCode == 200 && body != null && body != "")
             {
@@ -48,25 +46,23 @@
                     return;
                 }
 
-                res.status(200);
-                res.end;
+                console.log("Done sending order to orders service...");
+                //res.status(200);
+                res.end();
                 return;
 
             }
-
-
-            console.log("Done ending order to orders service...");
+            console.log(response.statusCode);
 
         });
 
-        // TODO
     });
 
 
 
 
-    // Get a particular users orders
-    app.get("/order", function (req, res, next)
+    // Get the list of orders for a particular customer
+    app.get("/order/:customerId", function (req, res, next)
     {
         console.log("Routing to Orders Service - Getting Orders");
 

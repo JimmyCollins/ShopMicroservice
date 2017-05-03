@@ -70,6 +70,7 @@
         }
 
 
+
         /**
          * Hide UI elements
          */
@@ -240,10 +241,25 @@
             var orderDataJson =JSON.stringify(orderData);
             console.log(orderDataJson);
 
+            /*$.post("/order",
+             {
+
+
+
+
+
+             },
+             function (data)
+             {
+                $('#cartmessage').html(data);
+             }
+             );*/
+
            $.ajax
             ({
                 type: "POST",
                 url: "/order",
+                //async:false,
                 contentType: 'application/json',
                 data: orderDataJson,
 
@@ -259,10 +275,25 @@
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
 
                     // TODO: Message user via popoup
-                    alert("Something went wrong checking out!");
+                    alert("Something went wrong checking out!\n" + textStatus + "\n" + errorThrown);
                 }
 
             });
+
+            /*$.ajax
+            ({
+                type: "POST",
+                url: "/order",
+                contentType: 'application/json',
+                data: orderDataJson,
+            }).done(function (data)
+            {
+                alert("success!");
+            }).fail(function (xhr)
+            {
+                alert("Something went wrong!!!")
+                console.log(xhr.responseText);
+            });*/
 
 
             //console.log(cartContents);
