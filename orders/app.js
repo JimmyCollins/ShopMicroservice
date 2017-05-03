@@ -20,10 +20,12 @@ var server = http.createServer(function (request, response)
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
     console.log("path: "+path);
-    //console.log("url: "+url1);
+    console.log("url: "+url1);
 
     if (request.method == 'POST')
     {
+        //console.log("method is POST");
+
         switch (path)
         {
             // Add a new order
@@ -41,63 +43,58 @@ var server = http.createServer(function (request, response)
 
                     var orderData = JSON.parse(body);
 
-                    console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
+                    // TODO: Call into stock service to check for levels of stock?
+                    // Or do this earlier?
 
+                    //console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
 
+                    // Insert into orders table
+                    var saleDate = getDate();
 
+                    var ordersQuery = "INSERT into orders (customerId, saledate)" +
+                            " VALUES (" + orderData.customerId +",'" + saleDate + "')";
 
-                    // TODO: Need to only pass one instance of customerID - make change in front-end handleCheckout function
+                    //console.log(ordersQuery);
 
-                    // TODO: This woorks now so can use to iterate over the orders below to add to orderdetails table
-                    for (var i=0;i<orderData.order.length;i++)
+                    db.query(ordersQuery, function(err, result)
                     {
-                        console.log("Customer ID:" + orderData.order[i].customerId);
-                    }
+                        if (err)
+                        {
+                            console.log("Error adding to orders table: " + err);
+                            throw err;
+                        }
 
-                    // -- getting date -- TODO - add to function -- //
-                    var today = new Date();
-                    var dd = today.getDate();
-                    var mm = today.getMonth()+1; //January is 0!
-                    var yyyy = today.getFullYear();
+                        var orderId = result.insertId;
+                        //console.log("Inserted OrderId = " + orderId);
 
-                    if(dd<10) {
-                        dd='0'+dd
-                    }
+                        // Insert order details
+                        for (var i=0; i < orderData.order.length; i++)
+                        {
+                            var productId = orderData.order[i].productId;
+                            var quantity = orderData.order[i].quantity;
 
-                    if(mm<10) {
-                        mm='0'+mm
-                    }
+                            var orderDetailsQuery = "INSERT into orderdetails (orderID, productID, quantity)" +
+                                "VALUES (" + orderId + "," + productId + "," + quantity +")";
 
-                    today = dd+'/'+mm+'/'+yyyy;
+                            //console.log(orderDetailsQuery);
 
-                    // ------------------------------------------------ //
+                            db.query(orderDetailsQuery, function(err, result)
+                            {
+                                if (err)
+                                {
+                                    console.log("Error adding to orderdetails table: " + err);
+                                    throw err;
+                                }
+                            });
 
-                    // Insert into orders
-                    console.log("Date - " + today);
+                        }
 
-                    // Ref: http://stackoverflow.com/questions/31371079/retrieve-last-inserted-id-with-mysql
+                    });
 
-                    /*var query = "INSERT into orders (customerId, saledate)" +
-                            "VALUES(" +  +"," + saleDate + ")";
+                    response.end();
 
-                    console.log(query);*/
+                    // TODO: Call into Stock service to decrement stock levels for these products?
 
-                    /*db.query(query, function(err, result)
-                    {
-                        if (err) throw err;
-
-                        console.log("Inserted OrderId = " + result.orderId);
-                    });*/
-
-
-                    // Need to insert into orders, then use that orderid to insert into orderdetails
-
-                    // NB: Don't forget here, there could be multiple items to add to the orderdetails table
-
-
-
-
-                    //TODO
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -109,8 +106,10 @@ var server = http.createServer(function (request, response)
 
         }
     }
-    /*else if(request.method == 'GET')
+    else if(request.method == 'GET')
     {
+        console.log("method is GET");
+
         // Get the details of an existing order
         switch (path)
         {
@@ -121,7 +120,33 @@ var server = http.createServer(function (request, response)
                 break;
 
         }
-    }*/
+    }
+
+    /**
+     * Get today's date
+     * @returns {Date} in the format DD/MM/YYYY
+     */
+    function getDate()
+    {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() +1;
+        var yyyy = today.getFullYear();
+
+        if(dd < 10)
+        {
+            dd = '0' + dd;
+        }
+
+        if(mm < 10)
+        {
+            mm = '0' + mm;
+        }
+
+        today = dd + '/' + mm + '/' + yyyy;
+
+        return today;
+    }
 
 });
 server.listen(3005);

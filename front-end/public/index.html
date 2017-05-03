@@ -217,32 +217,25 @@
          */
         function handleCheckout(cartContents)
         {
-            // Testing
-            /*for (i = 0; i < cartContents.length; i++)
-            {
-                console.log("Name: " + cartContents[i].name);
-                console.log("Price: " + cartContents[i].price);
-            }*/
-
             // Create JSON to send to orders service
             var orderData = {};
-            orderData.order = new Array();
 
+            // Customer ID
             var customerId = getCookie("customer_id");
+            orderData.customerId = customerId;
+
+            // Order details
+            orderData.order = new Array();
 
             for (i = 0; i < cartContents.length; i++)
             {
-                // TODO: Push single instance of customerID?
-
                 orderData.order.push({
-                    "customerId" : customerId,
                     "productId" : cartContents[i].productID,
                     "name" : cartContents[i].name,
                     "price" : cartContents[i].price,
                     "quantity" : cartContents[i].quantity
                 })
             }
-
 
             var orderDataJson =JSON.stringify(orderData);
             console.log(orderDataJson);

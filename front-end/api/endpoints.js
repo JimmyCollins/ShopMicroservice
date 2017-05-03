@@ -19,7 +19,7 @@
       stockUrl:      "http://localhost:3004",
 
       // Orders Service
-      ordersUrl:     "http://localhost:3005",
+      ordersUrl:     "http://localhost:3005/",
 
       // Unused / Not Implemented - DELETE BEFORE SUBMISSION
       tagsUrl:       "http://localhost:8082/catalogue/tags",
