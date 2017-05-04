@@ -1,0 +1,26 @@
+version: '2'
+services:
+  front-end:
+    image: jimmyc/front-end
+    ports:
+     - "8079:8079"
+  cart:
+    image: jimmyc/cart-service
+    ports:
+     - "3003:3003"
+  user:
+    image: jimmyc/user-service
+    ports:
+     - "3001:3001"
+  catalogue:
+    image: jimmyc/catalogue-service
+    ports:
+     - "3002:3002"
+  stock:
+    image: jimmyc/stock-service
+    ports:
+     - "3004:3004"
+  mysql:
+   image: jimmyc/mysql2
+   ports:
+     - "3306:3306"
