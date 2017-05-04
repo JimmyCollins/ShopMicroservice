@@ -12,7 +12,7 @@
     // TODO: Implement Order Service Wrapper Calls - some ref below
 
     // Add a new order
-    app.post("/order", function(req, res, next)
+    app.post("/order", function(req, res, body)
     {
         var options = {
             uri: endpoints.ordersUrl + "order",
@@ -46,13 +46,11 @@
                     return;
                 }
 
-                console.log("Done sending order to orders service...");
-                //res.status(200);
-                res.end();
-                return;
-
             }
-            console.log(response.statusCode);
+
+            console.log("Done sending order to orders service...");
+            console.log("Status Code: " + response.statusCode);
+            res.end();
 
         });
 
