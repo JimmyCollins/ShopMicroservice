@@ -60,11 +60,24 @@
 
 
     // Get the list of orders for a particular customer
-    app.get("/order/:customerId", function (req, res, next)
+    app.get("/order", function (req, res, body)
     {
         console.log("Routing to Orders Service - Getting Orders");
 
-        // TODO
+        var options = {
+            uri: endpoints.ordersUrl + "order",
+            method: 'GET',
+            json: true,
+            body: req.body
+        };
+
+        request(options, function(error, response, body) {
+
+
+
+
+
+        });
 
     });
 

@@ -21,15 +21,6 @@
 
         $(document).ready(function () {
 
-            // Check if cookie exists if so show user as logged in
-            var isLoggedIn = getCookie("logged_in");
-
-            if (isLoggedIn != undefined)
-            {
-                // TODO: How to get user name to show?
-                // Store it in cookie also?
-            }
-
 
         });
 
@@ -82,6 +73,7 @@
             $("#newProduct").hide();
             $("#products").hide();
             $("#cart").hide();
+            $("#orders").hide();
         }
 
 
@@ -201,9 +193,10 @@
         function logout()
         {
             // Delete cookies and reload the page
-            delete_cookie('customer-id');
-            delete_cookie('logged-in');
-            delete_cookie('user-type');
+            delete_cookie('customer_id');
+            delete_cookie('logged_in');
+            delete_cookie('user_type');
+            delete_cookie('user_name');
             location.reload();
         }
 
@@ -265,7 +258,7 @@
 
                 success: function () {
 
-                    // TODO
+                    // TODO - nicer alert with confirmation etc.
                     alert("success!");
 
 
@@ -457,6 +450,33 @@
             document.getElementById(name).innerHTML = out;
         }
 
+
+        function displayOrders()
+        {
+            var customerId = getCookie("customer_id")
+
+            // TODO: Get order details from orders service...
+
+            var out = '<div class="panel panel-default">';
+            out += '<div class="panel-heading">Your Orders</div>';
+
+
+            out += "</div>";
+
+            out += "</div>";
+
+
+            document.getElementById("orders").innerHTML = out;
+            hideAll();
+            $("#orders").show();
+        }
+
+
+
+
+
+
+
         //displayProducts(productsData,"products");
     </script>
 
@@ -562,10 +582,6 @@
                 });
             });
 
-            /*$(".alert-dismissible").fadeTo(2000, 500).slideUp(500, function(){
-                $(".alert-dismissible").alert('close');
-            });*/
-
             // Handler for when someone registers
             $('#registerForm').on( "submit",function(event)
             {
@@ -629,32 +645,45 @@
 
             });
 
-            // Used for the login/registration forms
-            /*$('#login-form-link').click(function(e) {
-                $("#logonForm").delay(100).fadeIn(100);
-                $("#registerForm").fadeOut(100);
-                $('#register-form-link').removeClass('active');
-                $(this).addClass('active');
-                e.preventDefault();
-            });
-            $('#register-form-link').click(function(e) {
-                $("#registerForm").delay(100).fadeIn(100);
-                $("#logonForm").fadeOut(100);
-                $('#login-form-link').removeClass('active');
-                $(this).addClass('active');
-                e.preventDefault();
-            });*/
+            // Check if cookie exists if so show user as logged in
+            var isLoggedIn = getCookie("logged_in");
+
+            if (isLoggedIn != undefined)
+            {
+                //alert("user should be logged in!!")
+                var name = getCookie("user_name");
+
+                // Set the name of the logged in user
+                $('#logged-in-text').text('Logged in as ' + name);
+
+                // Hide the login area
+                $("#login-dp").hide();
+                $("#login-area").hide();
+
+                // Show the logout area and the view orders button
+                console.log("before showing logout");
+                $("#logout-area").show();
+                $("#view-orders").show();
+                console.log("after showing logout");
+
+                // If the user is an admin user, show the admin option
+                var isAdmin = getCookie("user_type");
 
 
-            //
-            getProducts();
-            $("#view-orders").hide();
-            $("#logout-area").hide();
-            $("#adminMenu").hide();
-            //$("#login").hide();
-            //$('#register').hide();
-            //$('#loginOrRegister').hide();
-            //$("#newProduct").hide();
+                if (isAdmin == 1) {
+                    console.log("user is admin");
+                    $("#adminMenu").show();
+                }
+
+                getProducts();
+            }
+            else
+            {
+                getProducts();
+                $("#view-orders").hide();
+                $("#logout-area").hide();
+                $("#adminMenu").hide();
+            }
 
         });
     </script>
@@ -665,32 +694,8 @@
 
 <div class="container-fluid">
 
-    <!--<header>
-        <h1>Car Dealership</h1>
-    </header>-->
-
     <div class="panel panel-default">
         <div class="panel-body">
-
-            <!-- The main navigation bar
-            <nav class="navbar navbar-default">
-                <div class="container-fluid" style="text-align: center">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a onclick="showLoginOrRegister()">Login or Register</a>
-                        </li>
-                        <li>
-                            <a onclick="getProducts()">Show Cars</a>
-                        </li>
-                        <li>
-                            <a onclick="getCart()">Show Cart</a>
-                        </li>
-                        <li>
-                            <a onclick="showNewProduct()">New Product</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>-->
 
             <!-- REF: http://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form -->
             <nav class="navbar navbar-default navbar-inverse" role="navigation">
@@ -738,7 +743,7 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li><p class="navbar-text" id="logged-in-text"><b>Already have an account?</b></p></li>
-                            <li><p class="navbar-text" id="view-orders"><b><a href="#">View Orders</a></b></p></li>
+                            <li><p class="navbar-text" id="view-orders"><b><a onclick="displayOrders()">View Orders</a></b></p></li>
                             <li><p class="navbar-text" id="logout-area"><b><a onclick="logout()">Logout</a></b></p></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" id="login-area" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
@@ -787,30 +792,7 @@
             <div id="alertarea"></div>
             <div id="cart"></div>
             <div id="products"></div>
-            <!--<div id="logonmessage"></div>-->
-
-            <!-- Login UI -->
-            <!--<div id="login">
-                <h1>Login</h1>
-                <p>
-
-                <form id="logonForm" action="">
-                    <div class="form-group">
-
-                        Name:<br>
-                        <input type="text" name="name" value="">
-                        <br>
-                        Password:<br>
-                        <input type="text" name="password" value="">
-                        <br>
-                        <br>
-                        <input type="submit" class="btn btn-primary">
-                    </div>
-                </form>
-            </div>-->
-
-            <!-- REG FORM WAS HERE -->
-
+            <div id="orders"></div>
 
             <!-- Registration UI -->
             <div id="register">

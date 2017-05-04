@@ -9,7 +9,8 @@
         app = express(),
         logged_in = "logged_in",
         user_type = "user_type",
-        customer_id = "customer_id"
+        customer_id = "customer_id",
+        user_name = "user_name"
 
 
     app.get("/customers/:id", function(req, res, next) {
@@ -215,12 +216,15 @@
 
                 var customerId = body.customerId;
                 var usertype = body.usertype;
+                var name = body.username;
 
                 console.log('user id: ' + customerId);
                 console.log('user type: ' + usertype);
+                console.log('user name: ' + name);
 
                 req.session.customerId = customerId;
                 req.session.usertype = usertype;
+                req.session.username = name;
 
                 //console.log("set cookie: " + customerId);
 
@@ -243,6 +247,11 @@
 
                 // The user type
                 res.cookie(user_type, req.session.usertype, {
+                    maxAge: 14400000
+                });
+
+                // The user name
+                res.cookie(user_name, req.session.username, {
                     maxAge: 14400000
                 });
 

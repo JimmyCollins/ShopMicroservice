@@ -19,6 +19,7 @@ var cart = [];
 var theuser = null;
 var theuserid = null;
 var theusertype = null;
+var theusername = null;
 
 var server = http.createServer(function (request, response)
 {
@@ -64,9 +65,11 @@ var server = http.createServer(function (request, response)
                                 console.log("User is in the database" );
                                 theuserid = rows[0].userID;
                                 theusertype = rows[0].usertype;
+                                theusername = rows[0].name;
                                 var obj = {
                                     customerId: theuserid,
-                                    usertype: theusertype
+                                    usertype: theusertype,
+                                    username: theusername
                                 }
                                 response.end(JSON.stringify(obj));
 
