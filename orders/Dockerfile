@@ -13,3 +13,4 @@ COPY . /usr/src/app
 
 EXPOSE 3005
 CMD [ "npm", "start" ]
+

@@ -8,3 +8,4 @@ ENV MYSQL_DATABASE=shop \
 ADD db-schema-backup-with-sample-data.sql /docker-entrypoint-initdb.d
 
 EXPOSE 3306
+
