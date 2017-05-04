@@ -1,0 +1,8 @@
+
+For each service:
+
+0. Change IP's (at least test this - is it guarenteed that Bluemix will use the same IP's for the service the next time it's deployed?)
+
+1. Build new Docker Image
+2. Publish to Bluemix (and to DockerHub as a backup?)
+3. Start it up in a container on Bluemix
