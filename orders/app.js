@@ -1,7 +1,7 @@
 /**
  * Order Service
  *
- * TODO
+ * Handles saving/retrieving user orders
  */
 
 var http = require('http');
@@ -115,15 +115,60 @@ var server = http.createServer(function (request, response)
     {
         console.log("method is GET");
 
-        // Get the details of an existing order
         switch (path)
         {
+            // Get all orders for a particular user
             case "/order":
 
-            // TODO
+                response.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                var parsedUrl = url.parse(request.url, true);
+                var customerID = parsedUrl.query.customerId;
+
+                var query = "SELECT * FROM orders where customerID=" + customerID;
+
+                db.query(
+                    query,
+                    [],
+                    function (err, rows) {
+                        if (err) throw err;
+                        //console.log(JSON.stringify(rows, null, 2));
+                        response.end(JSON.stringify(rows));
+                        //console.log("order details sent");
+                    }
+                );
 
                 break;
 
+
+            // Get the details of a specific order
+            case "/orderDetails":
+
+                response.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                var orderDetailsUrl = url.parse(request.url, true);
+                var orderID = orderDetailsUrl.query.orderId;
+
+                var q = "SELECT * FROM orderdetails where orderID=" + orderID;
+
+                db.query(
+                     q,
+                     [],
+                     function(err, rows) {
+                     if (err) throw err;
+                     //console.log(JSON.stringify(rows, null, 2));
+                     response.end(JSON.stringify(rows));
+                     //console.log("order details sent");
+                     }
+                 );
+
+                break;
         }
     }
 

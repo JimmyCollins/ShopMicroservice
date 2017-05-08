@@ -16,7 +16,8 @@
 
         var headers = ["Product Name", "Price", "Picture", "Quantity", ""];
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
-
+        var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
+        var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
 
 
         $(document).ready(function () {
@@ -74,6 +75,7 @@
             $("#products").hide();
             $("#cart").hide();
             $("#orders").hide();
+            $("#orderDetails").hide();
         }
 
 
@@ -253,9 +255,7 @@
 
 
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                    //alert("Something went wrong checking out!\n" + textStatus + "\n" + errorThrown);
-                    $("#CoSuccessModal").modal('show');
+                    $("#ErrorModal").modal('show');
                 }
 
             });
@@ -280,6 +280,10 @@
                     }, 2000);
 
                     getCart();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
                 }
             });
         }
@@ -388,31 +392,132 @@
 
         function displayOrders()
         {
-            var customerId = getCookie("customer_id")
+            var customerId = getCookie("customer_id");
 
-            // TODO: Get order details from orders service...
+            $.ajax({
+                dataType: "json",
+                url: "/order",
+                data:
+                    {
+                        customerId: customerId
+                    },
 
+                success: function (data) {
+                    handleDisplayOrders(data);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function handleDisplayOrders(orderData)
+        {
             var out = '<div class="panel panel-default">';
             out += '<div class="panel-heading">Your Orders</div>';
 
+            out += "<table class='table'>";
+            var i;
+            out += '<tr>';
 
+            for (i = 0; i < OrderHeaders.length; i++)
+            {
+                out += '<th>' + OrderHeaders[i] + '</th>';
+            }
+
+            out += "</tr>";
+
+            for (i = 0; i < orderData.length; i++)
+            {
+                out += "<tr>";
+                out += '<td>' + orderData[i].orderID + '</td>';
+                out += '<td>' + orderData[i].saledate + '</td>';
+
+                out += '<td>' + "TODO" + '</td>';
+
+                out += '<td> <button class="btn btn-success" onclick="viewOrderDetails(' + orderData[i].orderID;
+                out1 = ")" + '">View Order Details</button></td>';
+                out += out1;
+
+                out += "</tr>";
+            }
+
+            out += "</table>";
             out += "</div>";
 
             out += "</div>";
 
+            out += "</div>";
 
             document.getElementById("orders").innerHTML = out;
             hideAll();
             $("#orders").show();
         }
+        
+
+        function viewOrderDetails(orderId)
+        {
+            $.ajax({
+                dataType: "json",
+                url: "/orderDetails",
+                data:
+                    {
+                        orderId: orderId
+                    },
+
+                success: function (data) {
+                    handleDisplayOrderDetails(data);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
 
 
+        function handleDisplayOrderDetails(orderDetails)
+        {
+            var out = '<div class="panel panel-default">';
+            out += '<div class="panel-heading">Order Details</div>';
 
+            out += "<table class='table'>";
+            var i;
+            out += '<tr>';
 
+            for (i = 0; i < OrderDetailsHeaders.length; i++)
+            {
+                out += '<th>' + OrderDetailsHeaders[i] + '</th>';
+            }
 
+            out += "</tr>";
 
+            for (i = 0; i < orderDetails.length; i++)
+            {
+                out += "<tr>";
+                out += '<td>' + orderDetails[i].orderdetailsID + '</td>';
+                out += '<td>' + orderDetails[i].orderID + '</td>';
+                out += '<td>' + orderDetails[i].productID + '</td>';
+                out += '<td>' + orderDetails[i].quantity + '</td>';
 
-        //displayProducts(productsData,"products");
+                out += "</tr>";
+            }
+
+            out += "</table>";
+            out += "</div>";
+
+            out += "</div>";
+
+            out += "</div>";
+
+            document.getElementById("orderDetails").innerHTML = out;
+            hideAll();
+            $("#orderDetails").show();
+
+        }
+
     </script>
 
 
@@ -657,7 +762,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Administration<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a onclick="showNewProduct()">New Product</a></li>
-                                    <li><a href="#">Stock Levels</a></li>   <!-- TODO: Create UI for stock levels and link here -->
+                                    <li><a href="#">Stock Management</a></li>   <!-- TODO: Create UI for stock levels and link here -->
                                     <!--<li><a href="#">Another action</a></li>
                                     <li><a href="#">Something else here</a></li>
                                     <li class="divider"></li>
@@ -728,6 +833,7 @@
             <div id="cart"></div>
             <div id="products"></div>
             <div id="orders"></div>
+            <div id="orderDetails"></div>
 
             <!-- Registration UI -->
             <div id="register">
@@ -845,8 +951,8 @@
                 </div>
             </div>
 
-            <!-- Checkout - error modal -->
-            <div id="CoErrorModal" class="modal fade" role="dialog">
+            <!-- Generic Error modal -->
+            <div id="ErrorModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">

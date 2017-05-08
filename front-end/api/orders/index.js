@@ -7,10 +7,6 @@
         , helpers   = require("../../helpers")
         , app       = express()
 
-    //var url = endpoints.ordersUrl + req.url.toString();
-
-    // TODO: Implement Order Service Wrapper Calls - some ref below
-
     // Add a new order
     app.post("/order", function(req, res, body)
     {
@@ -57,37 +53,22 @@
     });
 
 
-
-
     // Get the list of orders for a particular customer
-    app.get("/order", function (req, res, body)
+    app.get("/order", function (req, res, next)
     {
-        console.log("Routing to Orders Service - Getting Orders");
-
-        var options = {
-            uri: endpoints.ordersUrl + "order",
-            method: 'GET',
-            json: true,
-            body: req.body
-        };
-
-        request(options, function(error, response, body) {
-
-
-
-
-
-        });
-
+        var customerId =  req.query.customerId;
+        var url = endpoints.ordersUrl + "order?customerId=" + customerId;
+        helpers.simpleHttpRequest(url, res, next);
     });
 
 
-
-
-
-
-
-
+    // Get details of a specific order
+    app.get("/orderDetails", function (req, res, next)
+    {
+        var orderId =  req.query.orderId;
+        var url = endpoints.ordersUrl + "orderDetails?orderId=" + orderId;
+        helpers.simpleHttpRequest(url, res, next);
+    });
 
     module.exports = app;
 }());
