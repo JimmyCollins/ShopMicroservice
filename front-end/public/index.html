@@ -157,7 +157,8 @@
 
             if (isLoggedIn == undefined)
             {
-                alert("You need to be logged in to checkout! Please login or register to continue.");
+                $("#CoNotLoggedInModal").modal('show');
+                return;
             }
 
             $.ajax({
@@ -234,21 +235,7 @@
             var orderDataJson =JSON.stringify(orderData);
             console.log(orderDataJson);
 
-            /*$.post("/order",
-             {
-
-
-
-
-
-             },
-             function (data)
-             {
-                $('#cartmessage').html(data);
-             }
-             );*/
-
-           $.ajax
+            $.ajax
             ({
                 type: "POST",
                 url: "/order",
@@ -258,61 +245,20 @@
 
                 success: function () {
 
-                    // TODO - nicer alert with confirmation etc.
-                    alert("success!");
+                    $("#CoSuccessModal").modal('show');
 
+                    // TODO: Clear the cart and bring user to orders page
 
                 },
 
 
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
 
-                    // TODO: Message user via popoup
-                    alert("Something went wrong checking out!\n" + textStatus + "\n" + errorThrown);
+                    //alert("Something went wrong checking out!\n" + textStatus + "\n" + errorThrown);
+                    $("#CoSuccessModal").modal('show');
                 }
 
             });
-
-            /*$.ajax
-            ({
-                type: "POST",
-                url: "/order",
-                contentType: 'application/json',
-                data: orderDataJson,
-            }).done(function (data)
-            {
-                alert("success!");
-            }).fail(function (xhr)
-            {
-                alert("Something went wrong!!!")
-                console.log(xhr.responseText);
-            });*/
-
-
-            //console.log(cartContents);
-
-
-            /**
-             * Get the details of what is in the cart
-             * Call into the orders service (via orders\index.js) that should:
-             *  1. update the 'orders' table - high level info
-             *  2. update the 'orderdetails' table - adds the details on the actual orders
-             *
-             */
-
-            /*$.post("/order",
-                {
-                    // TODO
-
-
-
-
-                },
-                function (data) {
-                    $('#cartmessage').html(data);
-                }
-            );*/
-
         }
 
 
@@ -340,17 +286,6 @@
 
 
         /**
-         * TODO - Is this used anywhere?
-         * @param itemNo
-         */
-        /*function myFunction(itemNo)
-        {
-            str = JSON.stringify(products[itemNo]);
-            window.alert("You selected " + str);
-        }*/
-
-
-        /**
          * Show the list of products on the main page
          * @param products TODO
          * @param name TODO
@@ -359,7 +294,7 @@
         {
             var out = '<div class="panel panel-default">';
 
-            out += '<div class="panel-heading">Currently Available Cars</div>'; // TODO: Generalize to products?
+            out += '<div class="panel-heading">Currently Available Cars</div>';
 
             out += "<table class=table borderless>";
             var i;
@@ -872,6 +807,62 @@
                 <input type="submit" class="btn btn-primary">
                 </form>
             </div>
+
+
+            <!-- Checkout - not logged in modal -->
+            <div id="CoNotLoggedInModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>You must be logged in to Checkout. Please login or register to continue.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout - success modal -->
+            <div id="CoSuccessModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Order Success</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Your order has been successfully placed.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout - error modal -->
+            <div id="CoErrorModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>An error occurred checking out. Please try again later.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </div>

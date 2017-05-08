@@ -46,7 +46,7 @@ var server = http.createServer(function (request, response)
                     // TODO: Call into stock service to check for levels of stock?
                     // Or do this earlier?
 
-                    //console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
+                    console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
 
                     // Insert into orders table
                     var saleDate = getDate();
