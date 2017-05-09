@@ -18,13 +18,13 @@
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
-        var StockManagementHeaders = ["Product ID", "Product Name", "In Stock", "Add / Remove"];
+        var StockManagementHeaders = ["Product ID", "Product Name", "In Stock", "Stock Value", "Add / Remove"];
 
 
-        $(document).ready(function () {
+        /*$(document).ready(function () {
 
 
-        });
+        });*/
 
 
         /**
@@ -585,6 +585,9 @@
                 out += '<td>' + stockData[i].name + '</td>';
                 out += '<td>' + stockData[i].quantity + '</td>';
 
+                var stockValue = Number(stockData[i].quantity) * Number(stockData[i].price);
+                out += '<td>' + stockValue + '</td>';
+
                 out += '<td>' + '<input class="form-control" type="text" value="1" name="';
                 out += 'quantity' + i + '" id="stockQuant' + i
                 out += '">' + '</td>';
@@ -603,7 +606,7 @@
 
             out += "</div>";
 
-            out += "</div>";
+            //out += "</div>";
 
 
             document.getElementById("stockLevels").innerHTML = out;
@@ -973,7 +976,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Super Carz</a>
+                        <a class="navbar-brand" href="#">Super Carz Inc.</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
