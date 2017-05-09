@@ -625,6 +625,7 @@
 
                 success: function () {
                     $("#StockUpdatedModel").modal('show');
+                    displayStockLevels();
                 },
 
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
