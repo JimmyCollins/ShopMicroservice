@@ -18,6 +18,7 @@
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
+        var StockManagementHeaders = ["Product ID", "Product Name", "In Stock"];
 
 
         $(document).ready(function () {
@@ -76,6 +77,7 @@
             $("#cart").hide();
             $("#orders").hide();
             $("#orderDetails").hide();
+            $("#stockLevels").hide();
         }
 
 
@@ -534,6 +536,63 @@
 
         }
 
+
+        function displayStockLevels()
+        {
+            $.ajax({
+                dataType: "json",
+                url: "/stockLevels",
+
+                success: function (data) {
+                    handleDisplayStockLevels(data);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function handleDisplayStockLevels(stockData)
+        {
+            var out = '<div class="panel panel-default">';
+            out += '<div class="panel-heading">Order Details</div>';
+
+            out += "<table class='table'>";
+            var i;
+            out += '<tr>';
+
+            for (i = 0; i < StockManagementHeaders.length; i++)
+            {
+                out += '<th>' + StockManagementHeaders[i] + '</th>';
+            }
+
+            out += "</tr>";
+
+            for (i = 0; i < stockData.length; i++)
+            {
+                out += "<tr>";
+                out += '<td>' + stockData[i].productID + '</td>';
+                out += '<td>' + stockData[i].name + '</td>';
+                out += '<td>' + stockData[i].quantity + '</td>';
+                out += "</tr>";
+            }
+
+            out += "</table>";
+            out += "</div>";
+
+            out += "</div>";
+
+            out += "</div>";
+
+
+            document.getElementById("stockLevels").innerHTML = out;
+            hideAll();
+            $("#stockLevels").show();
+        }
+
+
     </script>
 
 
@@ -773,12 +832,11 @@
                             <li><a onclick="getProducts()">Show Cars</a></li>
                             <li><a onclick="getCart()">Show Cart</a></li>
 
-                            <!-- TODO - only show if Admin user -->
                             <li class="dropdown" id="adminMenu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Administration<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a onclick="showNewProduct()">New Product</a></li>
-                                    <li><a href="#">Stock Management</a></li>   <!-- TODO: Create UI for stock levels and link here -->
+                                    <li><a onclick="displayStockLevels()">Stock Management</a></li>
                                     <!--<li><a href="#">Another action</a></li>
                                     <li><a href="#">Something else here</a></li>
                                     <li class="divider"></li>
@@ -850,6 +908,7 @@
             <div id="products"></div>
             <div id="orders"></div>
             <div id="orderDetails"></div>
+            <div id="stockLevels"></div>
 
             <!-- Registration UI -->
             <div id="register">

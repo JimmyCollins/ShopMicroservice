@@ -19,8 +19,8 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    console.log("path: "+path);
-    console.log("url: "+url1);
+    //console.log("path: "+path);
+    //console.log("url: "+url1);
 
     if (request.method == 'POST')
     {
@@ -52,7 +52,26 @@ var server = http.createServer(function (request, response)
             // Get the current stock numbers for each product
             case "/currentStock":
 
-                // TODO
+                console.log("currentStock");
+
+                response.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                var query = "SELECT productID, name, quantity FROM products ";  // TODO: Where active is 1
+
+                db.query(
+                    query,
+                    [],
+                    function(err, rows) {
+                        if (err) throw err;
+                        console.log(JSON.stringify(rows, null, 2));
+                        response.end(JSON.stringify(rows));
+                        console.log("Stock details sent");
+                    }
+                );
+                break;
 
                 break;
 
@@ -67,3 +86,4 @@ var server = http.createServer(function (request, response)
 
 });
 server.listen(3004);
+console.log("Stock service running on Port 3004");

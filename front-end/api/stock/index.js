@@ -7,7 +7,14 @@
         , helpers   = require("../../helpers")
         , app       = express()
 
-    // TODO: Implement Stock Service Wrapper Calls
+    // Get the stock levels for all products
+    app.get("/stockLevels", function (req, res, next)
+    {
+        var url = endpoints.stockUrl + "currentStock";
+        helpers.simpleHttpRequest(url, res, next);
+    });
+
+    // TODO
 
     module.exports = app;
 }());
