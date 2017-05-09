@@ -14,7 +14,7 @@
 
     <script type="text/javascript" language="javascript">
 
-        var headers = ["Product Name", "Price", "Picture", "Quantity", ""];
+        var headers = ["Product Name", "Price", "Picture", "Description", "Quantity", ""];
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
@@ -313,16 +313,19 @@
             for (i = 0; i < products.length; i++)
             {
                 out += "<tr>";
-                out += '<td>' + products[i].name + '</td>';
+                out += '<td><b>' + products[i].name + '</b></td>';
                 out += '<td>' + products[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + products[i].image + '" style="width:104px;height:100px;">';
+                
+                out += '<td>' + products[i].description + '</td>';
+
                 out += '<td>' + '<input class="form-control" type="text" value="1" name="';
                 out += 'quantity' + i + '" id="quant' + i
                 out += '">' + '</td>';
 
                 out += '<td> <button class="btn btn-success" onclick="addToCart(' + products[i].productID;
-                out += ",'quant" + i + "')" + '">Buy</button></td>';
+                out += ",'quant" + i + "')" + '">Purchase</button></td>';
                 out += "</tr>";
             }
             out += "</table>";
