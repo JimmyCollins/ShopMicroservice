@@ -65,7 +65,36 @@ var server = http.createServer(function (request, response)
 
                 console.log("Stock Management Service - Delete");
 
-                // TODO
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var stockData = JSON.parse(body);
+                    console.log(stockData);
+
+                    // Might need to not do the calculation for the new stock level in front-end and do it here?
+
+                    var updateStockQuery = "UPDATE products set quantity=" + stockData.newStockLevel + " WHERE productID=" + stockData.productId;
+                    console.log(query);
+
+                    db.query(updateStockQuery, function(err, result) {
+                        if (err) {
+                            console.log("Error updating stock: " + err);
+                            throw err;
+                        }
+
+                        response.end();
+                    });
+
+                });
+
+                response.writeHead(200, {
+                    'Access-Control-Allow-Origin': '*'
+                });
 
                 break;
         }

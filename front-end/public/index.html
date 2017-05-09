@@ -260,6 +260,8 @@
 
                     // TODO: Clear the cart and bring user to orders page
 
+                    // TODO: Decrement stock levels here?
+
                 },
 
 
@@ -322,7 +324,7 @@
             for (i = 0; i < products.length; i++)
             {
                 out += "<tr>";
-                out += '<td><b>' + products[i].name + '</b></td>';
+                out += '<td><b><font size="3px">' + products[i].name + '</font></b></td>';
                 out += '<td>' + products[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + products[i].image + '" style="width:208px;height:200px;">';
@@ -627,6 +629,37 @@
 
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function removeStock(productID, fieldname, currentStock)
+        {
+            var removedStock = document.getElementById(fieldname).value;
+            var newStockLevel = Number(currentStock) - Number(removedStock);
+
+            var data = {
+                productId: productID,
+                newStockLevel : newStockLevel
+            };
+
+            var dataAsJson = JSON.stringify(data);
+            console.log(dataAsJson);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/removeStock",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    //$("#StockUpdatedModel").modal('show');
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //$("#ErrorModal").modal('show');
                 }
             });
         }
