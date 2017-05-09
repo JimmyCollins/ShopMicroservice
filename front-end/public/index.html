@@ -85,11 +85,11 @@
         /**
          * Show the login page
          */
-        function showLogin()
+        /*function showLogin()
         {
             hideAll();
             $("#login").show();
-        }
+        }*/
 
 
         /*function showLoginOrRegister()
@@ -116,7 +116,6 @@
         {
             hideAll();
             $("#newProduct").show();
-
         }
 
 
@@ -558,7 +557,7 @@
         function handleDisplayStockLevels(stockData)
         {
             var out = '<div class="panel panel-default">';
-            out += '<div class="panel-heading">Order Details</div>';
+            out += '<div class="panel-heading">Stock Level Details</div>';
 
             out += "<table class='table'>";
             var i;
@@ -577,6 +576,14 @@
                 out += '<td>' + stockData[i].productID + '</td>';
                 out += '<td>' + stockData[i].name + '</td>';
                 out += '<td>' + stockData[i].quantity + '</td>';
+
+                out += '<td>' + '<input class="form-control" type="text" value="1" name="';
+                out += 'quantity' + i + '" id="stockQuant' + i
+                out += '">' + '</td>';
+
+                out += '<td><button class="btn btn-success" onclick="addNewStock(' + stockData[i].productID;
+                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Add Stock</button></td>';
+
                 out += "</tr>";
             }
 
@@ -591,6 +598,37 @@
             document.getElementById("stockLevels").innerHTML = out;
             hideAll();
             $("#stockLevels").show();
+        }
+
+
+        function addNewStock(productID, fieldname, currentStock)
+        {
+            var addedStock = document.getElementById(fieldname).value;
+            var newStockLevel = Number(currentStock) + Number(addedStock);
+
+            var data = {
+                productId: productID,
+                newStockLevel : newStockLevel
+            };
+
+            var dataAsJson = JSON.stringify(data);
+            console.log(dataAsJson);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/addStock",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#StockUpdatedModel").modal('show');
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
         }
 
 
@@ -1124,6 +1162,24 @@
                         </div>
                         <div class="modal-body">
                             <p>No orders found.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock updated modal -->
+            <div id="StockUpdatedModel" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Stock levels updated successfully.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

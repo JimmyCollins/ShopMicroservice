@@ -14,7 +14,44 @@
         helpers.simpleHttpRequest(url, res, next);
     });
 
-    // TODO
+
+    // Add to the level of stock for a particular product
+    app.post("/addStock", function(req, res, body)
+    {
+        var options = {
+            uri: endpoints.stockUrl + "incrementStock",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("error with adding to stock "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error with adding to stock: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
+            }
+
+            console.log("Status Code: " + response.statusCode);
+            res.end();
+
+        });
+    });
+
 
     module.exports = app;
 }());

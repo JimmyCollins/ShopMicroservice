@@ -19,8 +19,6 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    //console.log("path: "+path);
-    //console.log("url: "+url1);
 
     if (request.method == 'POST')
     {
@@ -31,7 +29,34 @@ var server = http.createServer(function (request, response)
 
                 console.log("Stock Management Service - Add");
 
-                // TODO
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var stockData = JSON.parse(body);
+                    console.log(stockData);
+
+                    var updateStockQuery = "UPDATE products set quantity=" + stockData.newStockLevel + " WHERE productID=" + stockData.productId;
+                    console.log(query);
+
+                    db.query(updateStockQuery, function(err, result) {
+                        if (err) {
+                            console.log("Error updating stock: " + err);
+                            throw err;
+                        }
+
+                        response.end();
+                    });
+
+                });
+
+                response.writeHead(200, {
+                    'Access-Control-Allow-Origin': '*'
+                });
 
                 break;
 
