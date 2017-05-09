@@ -317,7 +317,7 @@
                 out += '<td>' + products[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + products[i].image + '" style="width:104px;height:100px;">';
-                
+
                 out += '<td>' + products[i].description + '</td>';
 
                 out += '<td>' + '<input class="form-control" type="text" value="1" name="';
@@ -325,7 +325,7 @@
                 out += '">' + '</td>';
 
                 out += '<td> <button class="btn btn-success" onclick="addToCart(' + products[i].productID;
-                out += ",'quant" + i + "')" + '">Purchase</button></td>';
+                out += ",'quant" + i + "')" + '">Add to Cart</button></td>';
                 out += "</tr>";
             }
             out += "</table>";
@@ -438,7 +438,7 @@
                 out += '<td>' + orderData[i].orderID + '</td>';
                 out += '<td>' + orderData[i].saledate + '</td>';
 
-                out += '<td>' + "TODO" + '</td>';
+                out += '<td>' + orderData[i].status + '</td>';
 
                 out += '<td> <button class="btn btn-success" onclick="viewOrderDetails(' + orderData[i].orderID;
                 out1 = ")" + '">View Order Details</button></td>';
