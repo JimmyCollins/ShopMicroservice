@@ -584,7 +584,10 @@
                 out += '">' + '</td>';
 
                 out += '<td><button class="btn btn-success" onclick="addNewStock(' + stockData[i].productID;
-                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Add Stock</button></td>';
+                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Add Stock</button>        ';
+
+                out += '<button class="btn btn-danger" onclick="removeStock(' + stockData[i].productID;
+                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Remove Stock</button></td>';
 
                 out += "</tr>";
             }
@@ -656,11 +659,12 @@
                 data: dataAsJson,
 
                 success: function () {
-                    //$("#StockUpdatedModel").modal('show');
+                    $("#StockUpdatedModel").modal('show');
+                    displayStockLevels();
                 },
 
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    //$("#ErrorModal").modal('show');
+                    $("#ErrorModal").modal('show');
                 }
             });
         }

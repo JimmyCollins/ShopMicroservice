@@ -76,10 +76,8 @@ var server = http.createServer(function (request, response)
                     var stockData = JSON.parse(body);
                     console.log(stockData);
 
-                    // Might need to not do the calculation for the new stock level in front-end and do it here?
-
                     var updateStockQuery = "UPDATE products set quantity=" + stockData.newStockLevel + " WHERE productID=" + stockData.productId;
-                    console.log(query);
+                    //console.log(updateStockQuery);
 
                     db.query(updateStockQuery, function(err, result) {
                         if (err) {
