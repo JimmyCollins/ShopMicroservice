@@ -101,9 +101,9 @@ app.delete("/cart/:custId/items/:id", function (req, res, next)
 app.get("/cart/:custId/items/", function (req, res, next)
 {
     var custId = req.params.custId;
-    console.log("getCart" + custId);
+    //console.log("getCart" + custId);
 
-    console.log('custID ' + custId);
+    //console.log('custID ' + custId);
 
     console.log(JSON.stringify(cart["" + custId], null, 2));
 

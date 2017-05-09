@@ -258,7 +258,13 @@
 
                     $("#CoSuccessModal").modal('show');
 
-                    // TODO: Clear the cart and bring user to orders page
+                    // Clear the cart and bring user to orders page
+                    for (i = 0; i < cartContents.length; i++)
+                    {
+                        deleteCartItem(cartContents[i].cartid);
+                    }
+
+                    displayOrders();
 
                     // TODO: Decrement stock levels here?
 

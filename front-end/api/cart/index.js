@@ -37,9 +37,9 @@
 */
 
   app.get("/cart", function (req, res, next) {
-    console.log("Request received: " + req.url + ", " + req.query.custId);
+    //console.log("Request received: " + req.url + ", " + req.query.custId);
     var custId = helpers.getCustomerId(req, app.get("env"));
-    console.log("Customer ID: " + custId);
+    //console.log("Customer ID: " + custId);
     request(endpoints.cartsUrl + "/cart/" + custId+"/items",
         function (error, response, body) {
       if (error) {

@@ -87,7 +87,7 @@
   /* TODO: Add documentation */
   helpers.getCustomerId = function(req, env) {
 
-    console.log("helpers/index - getCustomerId");
+    //console.log("helpers/index - getCustomerId");
 
     // Check if logged in. Get customer Id
     var logged_in = req.cookies.logged_in;
@@ -101,7 +101,7 @@
 
     if (!logged_in)
     {
-        console.log("user is not logged in");
+        //console.log("user is not logged in");
 
       if (!req.session.id)
       {
@@ -110,11 +110,11 @@
       }
 
       // Use Session ID instead
-        console.log("returning :" + req.session.id);
+        //console.log("returning :" + req.session.id);
       return req.session.id;
     }
 
-    console.log("helpers/index - getCustomerId - returning: " + req.session.customerId);
+    //console.log("helpers/index - getCustomerId - returning: " + req.session.customerId);
     return req.session.customerId;
   }
   module.exports = helpers;

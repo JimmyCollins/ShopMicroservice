@@ -128,7 +128,8 @@ var server = http.createServer(function (request, response)
                 var parsedUrl = url.parse(request.url, true);
                 var customerID = parsedUrl.query.customerId;
 
-                var query = "SELECT * FROM orders where customerID=" + customerID;
+                var query = "SELECT * FROM orders where customerID=" + customerID
+                    + " ORDER BY orderID DESC";
 
                 db.query(
                     query,
@@ -179,7 +180,7 @@ var server = http.createServer(function (request, response)
 
                 console.log("all orders");
 
-                var query = "SELECT * FROM orders"; // TODO: Only open orders?
+                var query = "SELECT * FROM orders ORDER BY orderID DESC"; // TODO: Only open orders?
 
                 db.query(
                     query,
