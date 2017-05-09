@@ -169,6 +169,30 @@ var server = http.createServer(function (request, response)
                  );
 
                 break;
+
+            case "/allOrders":
+
+                response.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                console.log("all orders");
+
+                var query = "SELECT * FROM orders"; // TODO: Only open orders?
+
+                db.query(
+                    query,
+                    [],
+                    function (err, rows) {
+                        if (err) throw err;
+                        console.log(JSON.stringify(rows, null, 2));
+                        response.end(JSON.stringify(rows));
+                        console.log("all order details sent");
+                    }
+                );
+
+                break;
         }
     }
 

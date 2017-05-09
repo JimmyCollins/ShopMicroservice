@@ -70,6 +70,14 @@
         helpers.simpleHttpRequest(url, res, next);
     });
 
+
+    // Get all orders (used in admin panel)
+    app.get("/allOrders", function (req, res, next)
+    {
+        var url = endpoints.ordersUrl + "allOrders";
+        helpers.simpleHttpRequest(url, res, next);
+    });
+
     module.exports = app;
 }());
 

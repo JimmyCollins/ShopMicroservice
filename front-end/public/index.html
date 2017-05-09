@@ -78,6 +78,7 @@
             $("#orders").hide();
             $("#orderDetails").hide();
             $("#stockLevels").hide();
+            $("#allOrderDetails").hide();
         }
 
 
@@ -593,6 +594,73 @@
         }
 
 
+        function displayAllOrders()
+        {
+            $.ajax({
+                dataType: "json",
+                url: "/allOrders",
+
+                success: function (data) {
+                    handleDisplayAllOrders(data);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function handleDisplayAllOrders(orderData)
+        {
+            if(orderData.length == 0)
+            {
+                $("#NoOrdersModal").modal('show');
+                return;
+            }
+
+            var out = '<div class="panel panel-default">';
+            out += '<div class="panel-heading">All Customer Orders</div>';
+
+            out += "<table class='table'>";
+            var i;
+            out += '<tr>';
+
+            for (i = 0; i < OrderHeaders.length; i++)
+            {
+                out += '<th>' + OrderHeaders[i] + '</th>';
+            }
+
+            out += "</tr>";
+
+            for (i = 0; i < orderData.length; i++)
+            {
+                out += "<tr>";
+                out += '<td>' + orderData[i].orderID + '</td>';
+                out += '<td>' + orderData[i].saledate + '</td>';
+
+                out += '<td>' + orderData[i].status + '</td>';
+
+                out += '<td> <button class="btn btn-success" onclick="viewOrderDetails(' + orderData[i].orderID;
+                out1 = ")" + '">View Order Details</button></td>';
+                out += out1;
+
+                out += "</tr>";
+            }
+
+            out += "</table>";
+            out += "</div>";
+
+            out += "</div>";
+
+            out += "</div>";
+
+            document.getElementById("allOrderDetails").innerHTML = out;
+            hideAll();
+            $("#allOrderDetails").show();
+        }
+
+
     </script>
 
 
@@ -837,6 +905,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a onclick="showNewProduct()">New Product</a></li>
                                     <li><a onclick="displayStockLevels()">Stock Management</a></li>
+                                    <li><a onclick="displayAllOrders()">All Orders</a></li>
                                     <!--<li><a href="#">Another action</a></li>
                                     <li><a href="#">Something else here</a></li>
                                     <li class="divider"></li>
@@ -909,6 +978,7 @@
             <div id="orders"></div>
             <div id="orderDetails"></div>
             <div id="stockLevels"></div>
+            <div id="allOrderDetails"></div>
 
             <!-- Registration UI -->
             <div id="register">
@@ -1053,7 +1123,7 @@
                             <h4 class="modal-title">Information</h4>
                         </div>
                         <div class="modal-body">
-                            <p>You have not placed any orders. Any orders you place in the future will be viewable here.</p>
+                            <p>No orders found.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
