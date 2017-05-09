@@ -14,18 +14,12 @@
 
     <script type="text/javascript" language="javascript">
 
+        // Table Headers
         var headers = ["Product Name", "Price", "Picture", "Description", "Quantity", ""];
         var Cartheaders = ["Product Name", "Price", "Picture", "Quantity","Total", ""];
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
         var StockManagementHeaders = ["Product ID", "Product Name", "In Stock", "Stock Value", "Add / Remove"];
-
-
-        /*$(document).ready(function () {
-
-
-        });*/
-
 
         /**
          * Display the cart
@@ -63,15 +57,12 @@
         }
 
 
-
         /**
-         * Hide UI elements
+         * Hide all user interface elements
          */
         function hideAll()
         {
-            //$("#login").hide();
             $("#register").hide();
-            //$("#loginOrRegister").hide();
             $("#newProduct").hide();
             $("#products").hide();
             $("#cart").hide();
@@ -80,23 +71,6 @@
             $("#stockLevels").hide();
             $("#allOrderDetails").hide();
         }
-
-
-        /**
-         * Show the login page
-         */
-        /*function showLogin()
-        {
-            hideAll();
-            $("#login").show();
-        }*/
-
-
-        /*function showLoginOrRegister()
-        {
-            hideAll();
-            $("#loginOrRegister").show();
-        }*/
 
 
         /**
@@ -121,12 +95,13 @@
 
         /**
          * Add an item to the cart
-         * @param prodid TODO
-         * @param fieldname TODO
+         * @param prodid The id of the product
+         * @param fieldname The fieldname (used to calculate the quantity)
          */
         function addToCart(prodid, fieldname)
         {
             var num = document.getElementById(fieldname).value;
+
             var dat = {
                 id: prodid,
                 qty : num
@@ -137,9 +112,8 @@
                 type: "POST",
                 url: "/cart",
                 contentType: 'application/json',
-
-                // JSON object to be sent to the authentication url
                 data: JSON.stringify(dat),
+
                 success: function () {
 
                     $('#alertarea').html("<div class='alert alert-success alert-dismissable'>Car added to cart successfully.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
@@ -148,15 +122,18 @@
                         $(".alert").alert('close');
                     }, 2000);
 
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
                 }
             });
         }
 
 
-
         function checkout()
         {
-            // Check if user is logged in first!
+            // Check if user is logged in first - we require user details to checkout
             var isLoggedIn = getCookie("logged_in");
 
             if (isLoggedIn == undefined)
@@ -168,8 +145,13 @@
             $.ajax({
                 dataType: "json",
                 url: "/cart",
+
                 success: function (cartContents) {
                     handleCheckout(cartContents);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
                 }
             });
         }
@@ -195,23 +177,32 @@
         }
 
 
+        /**
+         * Logout the user
+         */
         function logout()
         {
-            // Delete cookies and reload the page
-            delete_cookie('customer_id');
-            delete_cookie('logged_in');
-            delete_cookie('user_type');
-            delete_cookie('user_name');
+            // Delete necessary cookies and reload the page
+            deleteCookie('customer_id');
+            deleteCookie('logged_in');
+            deleteCookie('user_type');
+            deleteCookie('user_name');
             location.reload();
         }
 
-        var delete_cookie = function(name) {
+
+        /**
+         * Delete a cookie
+         * @param name The cookie name
+         */
+        function deleteCookie(name)
+        {
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        };
+        }
 
 
         /**
-         * Checkout functionality - probably goes to the cart service?
+         * Checkout functionality
          * @param cart The contents of the current cart
          */
         function handleCheckout(cartContents)
@@ -250,7 +241,6 @@
             ({
                 type: "POST",
                 url: "/order",
-                //async:false,
                 contentType: 'application/json',
                 data: orderDataJson,
 
@@ -281,13 +271,14 @@
 
         /**
          * Delete an item from the cart
-         * @param count - TODO - rename to ID or something better?
+         * @param id The id of the element in the cart to delete
          */
-        function deleteCartItem(count)
+        function deleteCartItem(id)
         {
             $.ajax({
-                url: '/cart/' + count,
+                url: '/cart/' + id,
                 type: 'DELETE',
+
                 success: function(result) {
 
                     $('#alertarea').html("<div class='alert alert-info alert-dismissable'>Item deleted from Cart.<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
@@ -305,6 +296,8 @@
             });
         }
 
+
+        // TODO: Finish commenting stuff below this line
 
         /**
          * Show the list of products on the main page
