@@ -425,6 +425,12 @@
 
         function handleDisplayOrders(orderData)
         {
+            if(orderData.length == 0)
+            {
+                $("#NoOrdersModal").modal('show');
+                return;
+            }
+
             var out = '<div class="panel panel-default">';
             out += '<div class="panel-heading">Your Orders</div>';
 
@@ -971,6 +977,24 @@
                         </div>
                         <div class="modal-body">
                             <p>Your cart is currently empty. Add some items to your cart in order to checkout.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No orders modal -->
+            <div id="NoOrdersModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>You have not placed any orders. Any orders you place in the future will be viewable here.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
