@@ -52,7 +52,7 @@ var server = http.createServer(function (request, response)
                     var saleDate = getDate();
 
                     var ordersQuery = "INSERT into orders (customerId, saledate, status)" +
-                            " VALUES (" + orderData.customerId +",'" + saleDate + "','" + "INITIAL" + "')";
+                            " VALUES (" + orderData.customerId +",'" + saleDate + "','" + "Processing" + "')";
 
                     console.log(ordersQuery);
 
