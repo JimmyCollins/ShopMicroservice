@@ -1,7 +1,7 @@
 /**
  * Stock Management Service
  *
- * TODO
+ * Provides functionality for managing stock levels
  */
 
 var http = require('http');
@@ -60,7 +60,7 @@ var server = http.createServer(function (request, response)
 
                 break;
 
-            // Take from the stock number for a product i.e. if one is sold
+            // Take from the stock number for a product
             case "/decrementStock":
 
                 console.log("Stock Management Service - Delete");
@@ -76,18 +76,39 @@ var server = http.createServer(function (request, response)
                     var stockData = JSON.parse(body);
                     console.log(stockData);
 
-                    var updateStockQuery = "UPDATE products set quantity=" + stockData.newStockLevel + " WHERE productID=" + stockData.productId;
-                    //console.log(updateStockQuery);
-
-                    db.query(updateStockQuery, function(err, result) {
-                        if (err) {
-                            console.log("Error updating stock: " + err);
+                    // Get the current stock level for the product
+                    var getStockLevelQuery = "SELECT quantity from products where productID=" + stockData.productId;
+                    //console.log("Get stock level query - " + getStockLevelQuery);
+                    db.query(getStockLevelQuery, function(err, rows)
+                    {
+                        if (err)
+                        {
+                            console.log("Error getting existing stock level: " + err);
                             throw err;
                         }
 
-                        response.end();
-                    });
+                        var currentStockLevel = rows[0].quantity;
+                        //console.log("Current stock level: " + currentStockLevel);
 
+                        var stockToRemove = stockData.removedStock;
+
+                        var newStockLevel = Number(currentStockLevel) - Number(stockToRemove);
+
+                        var updateStockQuery = "UPDATE products set quantity=" + newStockLevel + " WHERE productID=" + stockData.productId;
+                        console.log(updateStockQuery);
+
+                        db.query(updateStockQuery, function(err, result)
+                        {
+                             if (err)
+                             {
+                                 console.log("Error updating stock: " + err);
+                                 throw err;
+                             }
+
+                             response.end();
+                        });
+
+                    });
                 });
 
                 response.writeHead(200, {
@@ -118,9 +139,9 @@ var server = http.createServer(function (request, response)
                     [],
                     function(err, rows) {
                         if (err) throw err;
-                        console.log(JSON.stringify(rows, null, 2));
+                        //console.log(JSON.stringify(rows, null, 2));
                         response.end(JSON.stringify(rows));
-                        console.log("Stock details sent");
+                        //console.log("Stock details sent");
                     }
                 );
                 break;

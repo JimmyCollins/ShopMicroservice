@@ -13,7 +13,7 @@
         var url = endpoints.stockUrl + "currentStock";
         helpers.simpleHttpRequest(url, res, next);
     });
-    
+
 
     // Add to the level of stock for a particular product
     app.post("/addStock", function(req, res, body)

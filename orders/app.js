@@ -43,9 +43,6 @@ var server = http.createServer(function (request, response)
 
                     var orderData = JSON.parse(body);
 
-                    // TODO: Call into stock service to check for levels of stock?
-                    // Or do this earlier?
-
                     console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
 
                     // Insert into orders table
@@ -65,7 +62,6 @@ var server = http.createServer(function (request, response)
                         }
 
                         var orderId = result.insertId;
-                        //console.log("Inserted OrderId = " + orderId);
 
                         // Insert order details
                         for (var i=0; i < orderData.order.length; i++)
