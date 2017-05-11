@@ -330,12 +330,22 @@
 
                 out += '<td>' + products[i].description + '</td>';
 
-                out += '<td>' + '<input class="form-control" type="text" value="1" name="';
-                out += 'quantity' + i + '" id="quant' + i
-                out += '">' + '</td>';
+                if(products[i].quantity == 0)
+                {
+                    out += '<td> <img src="';
+                    out += "images/" + "out-of-stock.jpg" + '" style="width:104px;height:100px;">';
+                    out += '</td><td></td>';
+                }
+                else
+                {
+                    out += '<td>' + '<input class="form-control" type="text" value="1" name="';
+                    out += 'quantity' + i + '" id="quant' + i
+                    out += '">' + '</td>';
 
-                out += '<td> <button class="btn btn-success" onclick="addToCart(' + products[i].productID;
-                out += ",'quant" + i + "')" + '">Add to Cart</button></td>';
+                    out += '<td> <button class="btn btn-success" onclick="addToCart(' + products[i].productID;
+                    out += ",'quant" + i + "')" + '">Add to Cart</button></td>';
+                }
+
                 out += "</tr>";
             }
             out += "</table>";
