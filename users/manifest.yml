@@ -1,0 +1,5 @@
+---
+applications:
+ - name: users
+   host: users-jc
+   memory: 128M

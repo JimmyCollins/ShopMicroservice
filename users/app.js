@@ -8,12 +8,51 @@ var http = require('http');
 var url = require('url');
 var mysql = require('mysql');
 
-var db = mysql.createConnection({
-    host:     'localhost',
-    user:     'root',
-    password: 'root',
-    database: 'shop'
-});
+var port = (process.env.VCAP_APP_PORT || 3001);
+console.log("User Service - process.env.VCAP_APP_PORT " + port);
+console.log("User Service - process.env.PORT " + process.env.PORT);
+
+var host = (process.env.VCAP_APP_HOST || 'localhost');
+console.log("User Service - Host is " + host);
+
+if (process.env.VCAP_SERVICES)
+{
+    console.log("User Service - in if VCAP_SERVICES");
+
+    var services = JSON.parse(process.env.VCAP_SERVICES);
+
+    for (var svcName in services)
+    {
+        if (svcName.match(/^cleardb/))
+        {
+            var mysqlCreds = services[svcName][0]['credentials'];
+            var db = mysql.createConnection({
+                host: mysqlCreds.hostname,
+                port: mysqlCreds.port,
+                user: mysqlCreds.username,
+                password: mysqlCreds.password,
+                database: mysqlCreds.name
+            });
+
+            console.log("DB Name: " + mysqlCreds.name);
+            console.log("DB Host: " + mysqlCreds.hostname);
+            console.log("DB Port: " + mysqlCreds.port);
+            console.log("DB User: " + mysqlCreds.username);
+            console.log("DB Password: " + mysqlCreds.password);
+
+        }
+    }
+}
+else
+{
+    console.log("User Service - VCAP_SERVICES not found");
+    var db = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'shop'
+    });
+}
 
 var cart = [];
 var theuser = null;
@@ -150,5 +189,5 @@ var server = http.createServer(function (request, response)
    
 
 });
-server.listen(3001);
-console.log("Users service running on Port 3001");
+server.listen(port);
+console.log("Users service running on Port: " + port);

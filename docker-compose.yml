@@ -12,14 +12,26 @@ services:
     image: jimmyc/user-service
     ports:
      - "3001:3001"
+    links:
+     - mysql
   catalogue:
     image: jimmyc/catalogue-service
     ports:
      - "3002:3002"
+    links:
+     - mysql
   stock:
     image: jimmyc/stock-service
     ports:
      - "3004:3004"
+    links:
+     - mysql
+  orders:
+    image: jimmyc/orders-service
+    ports:
+     - "3005:3005"
+    links:
+     - mysql
   mysql:
    image: jimmyc/mysql2
    ports:

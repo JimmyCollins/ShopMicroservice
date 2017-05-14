@@ -1,0 +1,5 @@
+---
+applications:
+ - name: shop
+   host: shop-jc
+   memory: 256M

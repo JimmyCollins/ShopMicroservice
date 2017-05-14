@@ -40,6 +40,8 @@ process.argv.forEach(function (val, index, array) {
   }
 });
 
+console.log('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
+
 /* Mount API endpoints */
 app.use(cart);
 app.use(catalogue);
@@ -50,4 +52,7 @@ app.use(orders);
 var server = app.listen(process.env.PORT || 8079, function () {
   var port = server.address().port;
   console.log("App now running in %s mode on port %d", app.get("env"), port);
+  //alert("App now running in %s mode on port %d", app.get("env"), port);
+  console.log('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
+  //alert('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
 });

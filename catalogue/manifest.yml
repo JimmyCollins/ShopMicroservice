@@ -1,0 +1,5 @@
+---
+applications:
+ - name: catalogue-api
+   host: catalogue-api-jc
+   memory: 256M

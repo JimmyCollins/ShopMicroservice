@@ -1,0 +1,5 @@
+---
+applications:
+ - name: stock
+   host: stock-jc
+   memory: 128M

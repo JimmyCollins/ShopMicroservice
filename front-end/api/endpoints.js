@@ -5,21 +5,21 @@
   module.exports = {
 
       // Catalogue Service
-      catalogueUrl:  "http://localhost:3002",
-      newProductUrl:  "http://localhost:3002",
+      catalogueUrl:  "https://catalogue-api-jc.mybluemix.net",
+      newProductUrl:  "https://catalogue-api-jc.mybluemix.net",
 
       // Cart Service
-      cartsUrl:      "http://localhost:3003",
+      cartsUrl:      "https://cart-jc.mybluemix.net",
 
       // User Service
-      loginUrl:      "http://localhost:3001/login",
-      registerUrl:   "http://localhost:3001/register",
+      loginUrl:      "https://users-jc.mybluemix.net/login",
+      registerUrl:   "https://users-jc.mybluemix.net/register",
 
       // Stock Service
-      stockUrl:      "http://localhost:3004/",
+      stockUrl:      "https://stock-jc.mybluemix.net/",
 
       // Orders Service
-      ordersUrl:     "http://localhost:3005/",
+      ordersUrl:     "https://orders-jc.mybluemix.net/",
 
       // Unused / Not Implemented - DELETE BEFORE SUBMISSION
       tagsUrl:       "http://localhost:8082/catalogue/tags",
