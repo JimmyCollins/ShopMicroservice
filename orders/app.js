@@ -168,9 +168,9 @@ var server = http.createServer(function (request, response)
                     [],
                     function (err, rows) {
                         if (err) throw err;
-                        //console.log(JSON.stringify(rows, null, 2));
+                        console.log(JSON.stringify(rows, null, 2));
                         response.end(JSON.stringify(rows));
-                        //console.log("order details sent");
+                        console.log("order details sent");
                     }
                 );
 
@@ -195,9 +195,9 @@ var server = http.createServer(function (request, response)
                      [],
                      function(err, rows) {
                      if (err) throw err;
-                     //console.log(JSON.stringify(rows, null, 2));
+                     console.log(JSON.stringify(rows, null, 2));
                      response.end(JSON.stringify(rows));
-                     //console.log("order details sent");
+                     console.log("order details sent");
                      }
                  );
 

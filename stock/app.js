@@ -175,9 +175,9 @@ var server = http.createServer(function (request, response)
                     [],
                     function(err, rows) {
                         if (err) throw err;
-                        //console.log(JSON.stringify(rows, null, 2));
+                        console.log(JSON.stringify(rows, null, 2));
                         response.end(JSON.stringify(rows));
-                        //console.log("Stock details sent");
+                        console.log("Stock details sent");
                     }
                 );
                 break;
