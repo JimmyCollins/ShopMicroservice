@@ -64,5 +64,88 @@
         });
     });
 
+    app.post("/deactivateProduct", function(req, res, body)
+    {
+        var options = {
+            uri: endpoints.catalogueUrl + "/deactivateProduct",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Deactivating Product: " + JSON.stringify(req.body));
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error deactivating product: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error deactivating product: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
+            }
+
+            console.log("Status Code: " + response.statusCode);
+            res.end();
+
+        });
+
+    });
+
+    app.post("/reactivateProduct", function(req, res, body)
+    {
+        var options = {
+            uri: endpoints.catalogueUrl + "/reactivateProduct",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Reactivating Product: " + JSON.stringify(req.body));
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error reactivating product: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error reactivating product: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
+            }
+
+            console.log("Status Code: " + response.statusCode);
+            res.end();
+
+        });
+
+    });
+
+    app.post("/deleteProduct", function(req, res, body)
+    {
+        // TODO
+    });
+
   module.exports = app;
 }());

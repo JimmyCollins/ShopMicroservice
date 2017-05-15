@@ -108,14 +108,74 @@ var server = http.createServer(function (request, response)
             // Delete a product from the catalogue
             case "/deleteProduct":
 
-                // TODO
+
 
                 break;
 
-            // Deactive a product (but leave it in the catalogue)
+            // Deactivate a product (but leave it in the catalogue)
             case "/deactivateProduct":
 
-                // TODO
+                console.log("Inside deactivateProduct");
+
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var product = JSON.parse(body);
+
+                    var query = "UPDATE products SET active=0 where productID=" + product.productId;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                            console.log("Product deactivated!");
+                        }
+                    );
+
+                });
+
+                break;
+
+
+            // Reactivate an inactive product
+            case "/reactivateProduct":
+
+                console.log("Inside reactivateProduct");
+
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var product = JSON.parse(body);
+
+                    var query = "UPDATE products SET active=1 where productID=" + product.productId;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                            console.log("Product reactivated!");
+                        }
+                    );
+
+                });
 
                 break;
         }
@@ -131,7 +191,7 @@ var server = http.createServer(function (request, response)
                     'Content-Type': 'text/html',
                     'Access-Control-Allow-Origin': '*'
                 });
-                var query = "SELECT * FROM products ";  // TODO: Where active is 1
+                var query = "SELECT * FROM products WHERE active=1";
 
                 db.query(
                     query,

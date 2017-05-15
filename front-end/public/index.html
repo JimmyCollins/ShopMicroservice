@@ -294,9 +294,6 @@
         }
 
 
-
-
-
         /**
          * Delete an item from the cart
          * @param id The id of the element in the cart to delete
@@ -625,10 +622,24 @@
                 out += '">' + '</td>';
 
                 out += '<td><button class="btn btn-success" onclick="addNewStock(' + stockData[i].productID;
-                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Add Stock</button>        ';
+                out += ",'stockQuant" + i + "','" + stockData[i].quantity + "')" + '">Increase Stock Level</button>        ';
 
-                out += '<button class="btn btn-danger" onclick="removeStock(' + stockData[i].productID;
-                out += ",'stockQuant" + i + "')" + '">Remove Stock</button></td>';
+                out += '<button class="btn btn-warning" onclick="removeStock(' + stockData[i].productID;
+                out += ",'stockQuant" + i + "')" + '">Decrease Stock Level</button>        ';
+
+                if(stockData[i].active == 1)
+                {
+                    out += '<button class="btn btn-warning" onclick="deactivateStock(' + stockData[i].productID;
+                    out += ")" + '">Deactivate Product</button>        ';
+                }
+                else
+                {
+                    out += '<button class="btn btn-success" onclick="reactivateStock(' + stockData[i].productID;
+                    out += ")" + '">Reactivate Product</button>        ';
+                }
+
+                out += '<button class="btn btn-danger" onclick="deleteStock(' + stockData[i].productID;
+                out += ")" + '">Delete Product</button></td>';
 
                 out += "</tr>";
             }
@@ -637,9 +648,6 @@
             out += "</div>";
 
             out += "</div>";
-
-            //out += "</div>";
-
 
             document.getElementById("stockLevels").innerHTML = out;
             hideAll();
@@ -775,6 +783,67 @@
             hideAll();
             $("#allOrderDetails").show();
         }
+
+
+        function deactivateStock(productId)
+        {
+            var data = {
+                productId: productId,
+            };
+
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/deactivateProduct",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#ProductDeactivatedModel").modal('show');
+                    displayStockLevels();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function reactivateStock(productId)
+        {
+            var data = {
+                productId: productId,
+            };
+
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/reactivateProduct",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#ProductReactivatedModel").modal('show');
+                    displayStockLevels();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        function deleteStock(productId)
+        {
+            // TODO
+        }
+
 
 
     </script>
@@ -1281,6 +1350,42 @@
                         </div>
                         <div class="modal-body">
                             <p>Stock levels updated successfully.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Deactivated -->
+            <div id="ProductDeactivatedModel" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Product has been deactivated and will not be available for sale.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Reactivated -->
+            <div id="ProductReactivatedModel" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Product has been reactivated and is available for sale again.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

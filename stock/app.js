@@ -168,7 +168,7 @@ var server = http.createServer(function (request, response)
                     'Access-Control-Allow-Origin': '*'
                 });
 
-                var query = "SELECT productID, name, quantity, price FROM products ";  // TODO: Where active is 1
+                var query = "SELECT productID, name, quantity, price, active FROM products ";
 
                 db.query(
                     query,
