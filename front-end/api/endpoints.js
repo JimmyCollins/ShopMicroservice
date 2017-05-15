@@ -2,29 +2,41 @@
 {
   'use strict';
 
+  var catalogueUrl = "http://localhost:3002";
+  var cartsUrl = "http://localhost:3003";
+  var loginUrl = "http://localhost:3001/login";
+  var registerUrl = "http://localhost:3001/register";
+  var stockUrl = "http://localhost:3004/";
+  var ordersUrl = "http://localhost:3005/";
+
+  // If we are running in the Cloud, use the Bluemix service URL's
+  if(process.env.VCAP_SERVICES)
+  {
+      catalogueUrl = "https://catalogue-api-jc.mybluemix.net";
+      //newProductUrl = "https://catalogue-api-jc.mybluemix.net";
+      cartsUrl = "https://cart-jc.mybluemix.net";
+      loginUrl = "https://users-jc.mybluemix.net/login";
+      registerUrl = "https://users-jc.mybluemix.net/register";
+      stockUrl = "https://stock-jc.mybluemix.net/";
+      ordersUrl = "https://orders-jc.mybluemix.net/";
+  }
+
   module.exports = {
 
       // Catalogue Service
-      catalogueUrl:  "https://catalogue-api-jc.mybluemix.net",
-      newProductUrl:  "https://catalogue-api-jc.mybluemix.net",
+      catalogueUrl:  catalogueUrl,
 
       // Cart Service
-      cartsUrl:      "https://cart-jc.mybluemix.net",
+      cartsUrl: cartsUrl,
 
       // User Service
-      loginUrl:      "https://users-jc.mybluemix.net/login",
-      registerUrl:   "https://users-jc.mybluemix.net/register",
+      loginUrl: loginUrl,
+      registerUrl: registerUrl,
 
       // Stock Service
-      stockUrl:      "https://stock-jc.mybluemix.net/",
+      stockUrl: stockUrl,
 
       // Orders Service
-      ordersUrl:     "https://orders-jc.mybluemix.net/",
-
-      // Unused / Not Implemented - DELETE BEFORE SUBMISSION
-      tagsUrl:       "http://localhost:8082/catalogue/tags",
-      customersUrl:  "http://localhost:8080/customers",
-      addressUrl:    "http://localhost:8080/addresses",
-      cardsUrl:      "http://localhost:8080/cards"
+      ordersUrl: ordersUrl
   };
 }());

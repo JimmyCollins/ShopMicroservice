@@ -919,29 +919,46 @@
 
             });
 
-            // Handler for when a new product is submitted -- TODO - Move to calling the Stock management service?
+            // Handler for when a new product is submitted
             $('#newProductForm').on( "submit",function(event)
             {
                 event.preventDefault();
                 $("#newProduct").hide();
-                var fd = $('#newProductForm').serialize();
+                //var fd = $('#newProductForm').serialize();
 
-                $.post(
-                        "http://localhost:3002/newProduct",  // JC FIXME: Should go through 'wrapper' located in 'api'.
-                        fd,
-                        function (data) {
-                            console.log(data);
-                            //$('#logonmessage').html(data);
-                            //$("#alertarea").show();
-                            $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
-
-                            setTimeout(function() {
-                                $(".alert").alert('close');
-                            }, 2000);
+                var o={};
+                var a = $('#newProductForm').serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
                         }
-                );
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
 
+                var fd =JSON.stringify(o);
 
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "/newProduct",
+                    contentType: 'application/json',
+                    data: fd,
+                    success: function () {
+
+                        //$("#alertarea").show();
+                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
+
+                        setTimeout(function() {
+                            $(".alert").alert('close');
+                        }, 2000);
+
+                        // TODO: Redirect to main page?
+                    }
+                });
             });
 
             // Check if cookie exists if so show user as logged in
@@ -1166,6 +1183,10 @@
 
                 Price:<br>
                 <input type="text" name="price" value="">
+                <br>
+
+                Description:<br>
+                <input type="text" name="description" value="">
                 <br>
 
                 Image:<br>

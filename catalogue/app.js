@@ -82,11 +82,13 @@ var server = http.createServer(function (request, response)
                 });
 
                 request.on('end', function () {
-                    var product = qs.parse(body);
+
+                    var product = JSON.parse(body);
 
                     // Create SQL
-                    var dbInsert = "INSERT INTO products (name, quantity, price, image) VALUES ( '" + product.name + "','" + product.quantity + "','" + product.price + "','" + product.productImage + "');"
-                    //console.log(dbInsert.toString());
+                    var dbInsert = "INSERT INTO products (name, quantity, price, image, description) VALUES ( '" + product.name + "','" + product.quantity + "','" + product.price +
+                        "','" + product.productImage + "','" + product.description + "');"
+                    console.log(dbInsert.toString());
 
                     // Execute SQL
                     db.query(
