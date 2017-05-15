@@ -121,6 +121,7 @@
     console.log("app.delete in api/cart - custId - " + custId);
 
     var qty = req.body.qty;
+
     async.waterfall([
         function (callback) {
           var options = {
@@ -129,15 +130,17 @@
             json: true,
             body: {id: req.body.id}
           };
+
           console.log("GET product: "
               + options.uri + " body: " + JSON.stringify(options.body));
 
-          request(options,
-              function (error, response, body) {
+          request(options, function (error, response, body)
+          {
             console.log(body);
                 console.log(" product id "+body.productID);
             callback(error, body);
           });
+          
         },
         function (item, callback) {
           var options = {

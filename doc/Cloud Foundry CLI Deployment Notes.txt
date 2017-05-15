@@ -56,5 +56,6 @@ Finish design document
 Document deployment process
 Go back to feature dev
 
+Limitation of ClearDB - Only 4 concurrent connections are allowed - should be OK.
 
 

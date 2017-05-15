@@ -198,16 +198,16 @@ var server = http.createServer(function (request, response)
                     [],
                     function(err, rows) {
                         if (err) throw err;
-                        console.log(JSON.stringify(rows, null, 2));
+                        //console.log(JSON.stringify(rows, null, 2));
                         response.end(JSON.stringify(rows));
-                        console.log("Products sent");
+                        //console.log("Products sent");
                     }
                 );
                 break;
 
             // Get details of a specific product
             case "/getProduct":
-                console.log("getProduct");
+                console.log("In getProduct");
                 var body="";
                 request.on('data', function (data) {
                     body += data;
@@ -219,7 +219,7 @@ var server = http.createServer(function (request, response)
                         'Content-Type': 'text/html',
                         'Access-Control-Allow-Origin': '*'
                     });
-                    console.log(JSON.stringify(product, null, 2));
+                    console.log("getProduct JSON received" + JSON.stringify(product, null, 2));
                     var query = "SELECT * FROM products where productID="+
                         product.id;
 
@@ -228,9 +228,9 @@ var server = http.createServer(function (request, response)
                         [],
                         function(err, rows) {
                             if (err) throw err;
-                            console.log(JSON.stringify(rows, null, 2));
+                            //console.log(JSON.stringify(rows, null, 2));
                             response.end(JSON.stringify(rows[0]));
-                            console.log("Products sent");
+                            //console.log("Products sent");
                         }
                     );
 
