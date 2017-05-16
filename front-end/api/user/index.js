@@ -167,12 +167,12 @@
                 var customerId = body.id;
                 console.log(customerId);
                 req.session.customerId = customerId;
-                console.log("set cookie" + customerId);
+                //console.log("set cookie" + customerId);
                 res.status(200);
-                res.cookie(cookie_name, req.session.id, {
+                /*res.cookie(cookie_name, req.session.id, {
                     maxAge: 3600000
                 }).send({id: customerId});
-                console.log("Sent cookies.");
+                console.log("Sent cookies.");*/
                 res.end();
                 return;
             }
