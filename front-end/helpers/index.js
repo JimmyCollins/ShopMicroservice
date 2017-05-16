@@ -84,13 +84,22 @@
     }.bind({res: res}));
   }
 
-  /* TODO: Add documentation */
-  helpers.getCustomerId = function(req, env) {
 
-    //console.log("helpers/index - getCustomerId");
-
+  helpers.getCustomerId = function(req, env)
+  {
     // Check if logged in. Get customer Id
-    var logged_in = req.cookies.logged_in;
+      var logged_in = req.cookies.logged_in;
+
+      if (!logged_in)
+      {
+        console.log("user not logged in - no customer id");
+        return 0;
+      }
+
+      var custId = req.cookies.customer_id;
+
+      return custId;
+
 
     // TODO REMOVE THIS, SECURITY RISK
     /*if (env == "development" && req.query.custId != null)
@@ -99,11 +108,11 @@
       return req.query.custId;
     }*/
 
-    if (!logged_in)
+    /*if (!logged_in)
     {
         //console.log("user is not logged in");
 
-      if (!req.session.id)
+      /*if (!req.session.id)
       {
         console.log("no session id?");
         throw new Error("User not logged in.");
@@ -115,7 +124,8 @@
     }
 
     //console.log("helpers/index - getCustomerId - returning: " + req.session.customerId);
-    return req.session.customerId;
+    return req.session.customerId;*/
   }
-  module.exports = helpers;
+
+    module.exports = helpers;
 }());

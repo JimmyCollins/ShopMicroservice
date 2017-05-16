@@ -16,6 +16,7 @@ var cart = [];
  */
 app.post("/add", function (req, res, next)
 {
+    console.log("Adding to cart from cart service");
     var obj = req.body;
     console.log("Customer: " + obj.custId);
     console.log("Attempting to add to cart: " + JSON.stringify(req.body));
@@ -55,7 +56,7 @@ app.post("/add", function (req, res, next)
         "quantity": obj.quantity
     };
 
-    //console.log(JSON.stringify(data));
+    console.log(JSON.stringify(data));
     c.push(data);
 
     res.status(201);
