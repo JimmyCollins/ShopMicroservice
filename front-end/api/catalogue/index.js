@@ -144,7 +144,40 @@
 
     app.post("/deleteProduct", function(req, res, body)
     {
-        // TODO
+        var options = {
+            uri: endpoints.catalogueUrl + "/deleteProduct",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Deleting Product: " + JSON.stringify(req.body));
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error deleting product: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error deleting product: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
+            }
+
+            console.log("Status Code: " + response.statusCode);
+            res.end();
+
+        });
     });
 
   module.exports = app;

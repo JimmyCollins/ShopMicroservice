@@ -841,9 +841,29 @@
 
         function deleteStock(productId)
         {
-            // TODO
-        }
+            var data = {
+                productId: productId,
+            };
 
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/deleteProduct",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#ProductDeletedModel").modal('show');
+                    displayStockLevels();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
 
 
     </script>
@@ -1386,6 +1406,24 @@
                         </div>
                         <div class="modal-body">
                             <p>Product has been reactivated and is available for sale again.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Deleted -->
+            <div id="ProductDeletedModel" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Product has been deleted.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

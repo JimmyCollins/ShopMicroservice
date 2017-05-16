@@ -108,7 +108,31 @@ var server = http.createServer(function (request, response)
             // Delete a product from the catalogue
             case "/deleteProduct":
 
+                var body = '';
 
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var product = JSON.parse(body);
+
+                    var query = "DELETE from products where productID=" + product.productId;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                            console.log("Product deleted!");
+                        }
+                    );
+
+                });
 
                 break;
 
