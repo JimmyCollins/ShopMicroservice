@@ -26,6 +26,7 @@
         helpers.simpleHttpRequest(endpoints.tagsUrl, res, next);
     });
 
+    // Add a new product in the catalogue
     app.post("/newProduct", function(req, res, body)
     {
         var options = {
@@ -34,8 +35,6 @@
             json: true,
             body: req.body
         };
-
-        console.log("Posting New Product: " + JSON.stringify(req.body));
 
         request(options, function(error, response, body) {
 
@@ -58,12 +57,12 @@
 
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });
     });
 
+    // Deactivate an existing product in the catalogue
     app.post("/deactivateProduct", function(req, res, body)
     {
         var options = {
@@ -72,8 +71,6 @@
             json: true,
             body: req.body
         };
-
-        console.log("Deactivating Product: " + JSON.stringify(req.body));
 
         request(options, function(error, response, body) {
 
@@ -96,13 +93,13 @@
 
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });
 
     });
 
+    // Reactivate an existing product in the catalogue
     app.post("/reactivateProduct", function(req, res, body)
     {
         var options = {
@@ -111,8 +108,6 @@
             json: true,
             body: req.body
         };
-
-        console.log("Reactivating Product: " + JSON.stringify(req.body));
 
         request(options, function(error, response, body) {
 
@@ -135,13 +130,13 @@
 
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });
 
     });
 
+    // Delete a product from the catalog
     app.post("/deleteProduct", function(req, res, body)
     {
         var options = {
@@ -150,8 +145,6 @@
             json: true,
             body: req.body
         };
-
-        console.log("Deleting Product: " + JSON.stringify(req.body));
 
         request(options, function(error, response, body) {
 
@@ -174,7 +167,6 @@
 
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });

@@ -10,7 +10,7 @@
         logged_in = "logged_in",
         user_type = "user_type",
         customer_id = "customer_id",
-        user_name = "user_name"
+        user_name = "user_name";
 
 
     app.get("/customers/:id", function(req, res, next) {

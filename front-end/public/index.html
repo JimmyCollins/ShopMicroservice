@@ -134,7 +134,7 @@
         function checkout()
         {
             // Check if user is logged in first - we require user details to checkout
-            var isLoggedIn = getCookie("logged_in");
+            var isLoggedIn = getCookieValue("logged_in");
 
             if (isLoggedIn == undefined)
             {
@@ -174,7 +174,7 @@
             var orderData = {};
 
             // Customer ID
-            var customerId = getCookie("customer_id");
+            var customerId = getCookieValue("customer_id");
             orderData.customerId = customerId;
 
             // Order details
@@ -248,25 +248,32 @@
             });
         }
 
+        
+        /**
+         * Get the value of a cookie
+         * @param key The cookie name
+         * */
+        function getCookieValue(name)
+        {
+            var allCookies = document.cookie.split('; ');
+            var cookie;
 
-        // TODO: Obfuscate
-        // See http://stackoverflow.com/questions/10730362/get-cookie-by-name
-        // Or http://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript
-        // And https://www.w3schools.com/js/js_cookies.asp
-        function getCookie(key){
-            var cok = document.cookie.split('; ');
-            var x;
-            if(cok.length > 1){
-                for(var i = 0; i < cok.length; i++){
-                    if(cok[i].split('=')[0] == key){
-                        x = cok[i].split('=')[1];
+            if(allCookies.length > 1)
+            {
+                for(var i = 0; i < allCookies.length; i++)
+                {
+                    if(allCookies[i].split('=')[0] == name)
+                    {
+                        cookie = allCookies[i].split('=')[1];
                     }
                 }
             }
-            else if(document.cookie.split('=')[0] == key){
-                x = document.cookie.split('=')[1];
+            else if(document.cookie.split('=')[0] == name)
+            {
+                cookie = document.cookie.split('=')[1];
             }
-            return x;
+            
+            return cookie;
         }
 
 
@@ -322,12 +329,10 @@
         }
 
 
-        // TODO: Finish commenting stuff below this line
-
         /**
          * Show the list of products on the main page
-         * @param products TODO
-         * @param name TODO
+         * @param products The product data
+         * @param name The name of the HTML element where we'll add the product markup
          */
         function displayProducts(products, name)
         {
@@ -384,14 +389,11 @@
 
         /**
          * Display the cart UI
-         * @param cart TODO
-         * @param name TODO
+         * @param cart The cart data
+         * @param name The name of the HTML element where we'll add the cart markup
          */
         function displayCart(cart, name)
         {
-            console.log("displayCart:" + cart);
-            console.log("displayCart:" + name);
-
             var out = '<div class="panel panel-default">';
 
             out += '<div class="panel-heading">Shopping Cart Contents</div>';
@@ -425,9 +427,8 @@
 
                 out += "</tr>";
                 total += cart[i].price* cart[i].quantity;
-
-
             }
+
             out += "</table>";
             out += "</div>";
 
@@ -435,13 +436,17 @@
             out += "<h3>Total: <span class='badge'> " + total +'</span></h3><br>';
             out += '<button class="btn btn-primary" onclick="checkout()">Checkout for <span class="badge"</span>' + total + '</button><br>';
             out+='<div id="cartmessage"></div>';
+
             document.getElementById(name).innerHTML = out;
         }
 
 
+        /**
+         * Grabs the orders for the current user
+         */
         function displayOrders()
         {
-            var customerId = getCookie("customer_id");
+            var customerId = getCookieValue("customer_id");
 
             $.ajax({
                 dataType: "json",
@@ -462,6 +467,10 @@
         }
 
 
+        /**
+         * Handles displaying the orders for the current user
+         * @param orderData The order data to display
+         */
         function handleDisplayOrders(orderData)
         {
             if(orderData.length == 0)
@@ -510,8 +519,12 @@
             hideAll();
             $("#orders").show();
         }
-        
 
+
+        /**
+         * Grabs details of a specific order
+         * @param orderId The ID of the order in the database
+         */
         function viewOrderDetails(orderId)
         {
             $.ajax({
@@ -533,6 +546,10 @@
         }
 
 
+        /**
+         * Handles displaying details of a specific order
+         * @param orderDetails The order data to display
+         */
         function handleDisplayOrderDetails(orderDetails)
         {
             var out = '<div class="panel panel-default">';
@@ -556,7 +573,6 @@
                 out += '<td>' + orderDetails[i].orderID + '</td>';
                 out += '<td>' + orderDetails[i].productID + '</td>';
                 out += '<td>' + orderDetails[i].quantity + '</td>';
-
                 out += "</tr>";
             }
 
@@ -570,10 +586,12 @@
             document.getElementById("orderDetails").innerHTML = out;
             hideAll();
             $("#orderDetails").show();
-
         }
 
 
+        /**
+         * Grabs the stock level data
+         */
         function displayStockLevels()
         {
             $.ajax({
@@ -591,6 +609,10 @@
         }
 
 
+        /**
+         * Handles displaying the stock level data
+         * @param stockData The stock data to display
+         */
         function handleDisplayStockLevels(stockData)
         {
             var out = '<div class="panel panel-default">';
@@ -655,6 +677,12 @@
         }
 
 
+        /**
+         * Increase the stock levels for the given product
+         * @param productID The product ID
+         * @param fieldname The amount to increase the stock by
+         * @param currentStock The current stock level
+         */
         function addNewStock(productID, fieldname, currentStock)
         {
             var addedStock = document.getElementById(fieldname).value;
@@ -666,7 +694,6 @@
             };
 
             var dataAsJson = JSON.stringify(data);
-            console.log(dataAsJson);
 
             $.ajax
             ({
@@ -687,6 +714,11 @@
         }
 
 
+        /**
+         * Decrease the stock levels for the given product
+         * @param productID The product ID
+         * @param fieldname The amount to decrease the stock by
+         */
         function removeStock(productID, fieldname)
         {
             var removedStock = document.getElementById(fieldname).value;
@@ -697,7 +729,6 @@
             };
 
             var dataAsJson = JSON.stringify(data);
-            console.log(dataAsJson);
 
             $.ajax
             ({
@@ -718,6 +749,9 @@
         }
 
 
+        /**
+         * Grab all historical orders
+         */
         function displayAllOrders()
         {
             $.ajax({
@@ -735,6 +769,10 @@
         }
 
 
+        /**
+         * Handles displaying of all historical orders
+         * @param orderData The order data to display
+         */
         function handleDisplayAllOrders(orderData)
         {
             if(orderData.length == 0)
@@ -785,6 +823,10 @@
         }
 
 
+        /**
+         * Deactivate a product on the site
+         * @param productId The product ID
+         */
         function deactivateStock(productId)
         {
             var data = {
@@ -812,6 +854,10 @@
         }
 
 
+        /**
+         * Reactivate a product on the site
+         * @param productId The product ID
+         */
         function reactivateStock(productId)
         {
             var data = {
@@ -839,6 +885,10 @@
         }
 
 
+        /**
+         * Completely delete a product
+         * @param productId The product ID
+         */
         function deleteStock(productId)
         {
             var data = {
@@ -865,7 +915,6 @@
             });
         }
 
-
     </script>
 
 
@@ -877,7 +926,6 @@
             $('#logonForm').on( "submit",function(event) {
 
                 event.preventDefault();
-                //$("#login").hide();
 
                 var o={};
 
@@ -891,17 +939,14 @@
                             o[this.name] = [o[this.name]];
                         }
                         o[this.name].push(this.value || '');
-
                     }
                     else
                     {
                         o[this.name] = this.value || '';
                     }
-
                 });
 
                 var fd =JSON.stringify(o);
-                console.log(fd);
 
                 $.ajax
                 ({
@@ -911,11 +956,7 @@
                     data: fd,
                     success: function () {
 
-                        //$("#alertarea").show();
                         var obj = $.parseJSON(fd);
-
-                        // Set the customer ID in the session?
-                        //req.session.customerId
 
                         // Set the name of the logged in user
                         $('#logged-in-text').text('Logged in as ' + obj['name']);
@@ -929,13 +970,12 @@
                         $("#view-orders").show();
 
                         // If the user is an admin user, show the admin option
-                        var isAdmin = getCookie("user_type");
+                        var isAdmin = getCookieValue("user_type");
 
                         if(isAdmin == 1)
                         {
                             $("#adminMenu").show();
                         }
-
 
                         // Alert use of successful login
                         $('#alertarea').html("<div class='alert alert-success alert-dismissible'>Logged in Successfully." + obj['name'] +
@@ -944,14 +984,6 @@
                         setTimeout(function() {
                             $(".alert").alert('close');
                         }, 2000);
-
-                        // TODO: How to retain login after page refresh?
-
-                        // TODO: How to get usertype of logged in user an if=1 show admin pages?
-
-                        // TODO: Should see a View Orders button when user logs in also, that can be used to query for current orders (via the orders service)
-
-
                     },
 
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -961,10 +993,6 @@
                         setTimeout(function() {
                             $(".alert").alert('close');
                         }, 5000);
-
-
-                        //alert("Status: " + textStatus); alert("Error: " + errorThrown);
-
                     }
 
                 });
@@ -975,20 +1003,27 @@
             {
                 event.preventDefault();
                 $("#register").hide();
+
                 var o={};
+
                 var a = $('#registerForm').serializeArray();
                 $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
+                    if (o[this.name] !== undefined)
+                    {
+                        if (!o[this.name].push)
+                        {
                             o[this.name] = [o[this.name]];
                         }
                         o[this.name].push(this.value || '');
-                    } else {
+                    }
+                    else
+                    {
                         o[this.name] = this.value || '';
                     }
                 });
+
                 var fd =JSON.stringify(o);
-                console.log(fd);
+
                 $.ajax
                 ({
                     type: "POST",
@@ -1012,17 +1047,22 @@
             {
                 event.preventDefault();
                 $("#newProduct").hide();
-                //var fd = $('#newProductForm').serialize();
 
                 var o={};
+
                 var a = $('#newProductForm').serializeArray();
-                $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
+                $.each(a, function()
+                {
+                    if (o[this.name] !== undefined)
+                    {
+                        if (!o[this.name].push)
+                        {
                             o[this.name] = [o[this.name]];
                         }
                         o[this.name].push(this.value || '');
-                    } else {
+                    }
+                    else
+                    {
                         o[this.name] = this.value || '';
                     }
                 });
@@ -1037,7 +1077,6 @@
                     data: fd,
                     success: function () {
 
-                        //$("#alertarea").show();
                         $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
 
                         setTimeout(function() {
@@ -1050,12 +1089,12 @@
             });
 
             // Check if cookie exists if so show user as logged in
-            var isLoggedIn = getCookie("logged_in");
+            var isLoggedIn = getCookieValue("logged_in");
 
             if (isLoggedIn != undefined)
             {
                 //alert("user should be logged in!!")
-                var name = getCookie("user_name");
+                var name = getCookieValue("user_name");
 
                 // Set the name of the logged in user
                 $('#logged-in-text').text('Logged in as ' + name);
@@ -1071,16 +1110,14 @@
                 console.log("after showing logout");
 
                 // If the user is an admin user, show the admin option
-                var isAdmin = getCookie("user_type");
+                var isAdmin = getCookieValue("user_type");
 
-
-                if (isAdmin == 1) {
-                    console.log("user is admin");
+                if (isAdmin == 1)
+                {
                     $("#adminMenu").show();
                 }
 
                 getProducts();
-
             }
             else
             {
@@ -1105,7 +1142,6 @@
             <!-- REF: http://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form -->
             <nav class="navbar navbar-default navbar-inverse" role="navigation">
                 <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span>
@@ -1116,7 +1152,6 @@
                         <a class="navbar-brand" href="#">Super Carz Inc.</a>
                     </div>
 
-                    <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li><a onclick="getProducts()">Show Cars</a></li>
@@ -1128,12 +1163,6 @@
                                     <li><a onclick="showNewProduct()">New Product</a></li>
                                     <li><a onclick="displayStockLevels()">Stock Management</a></li>
                                     <li><a onclick="displayAllOrders()">View All Orders</a></li>
-                                    <!--<li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">One more separated link</a></li>-->
                                 </ul>
                             </li>
 
@@ -1156,12 +1185,6 @@
                                     <li>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <!--Login via
-                                                <div class="social-buttons">
-                                                    <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
-                                                    <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
-                                                </div>
-                                                or-->
                                                 <form class="form" role="form" method="post" action="" accept-charset="UTF-8" id="logonForm">
                                                     <div class="form-group">
                                                         <label class="sr-only" for="usernameLogonForm">Email address</label>
@@ -1170,16 +1193,10 @@
                                                     <div class="form-group">
                                                         <label class="sr-only" for="passwordLogonForm">Password</label>
                                                         <input type="password" name="password" class="form-control" id="passwordLogonForm" placeholder="Password" required>
-                                                        <!--<div class="help-block text-right"><a href="">Forget the password ?</a></div>-->
                                                     </div>
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary btn-block">Sign in</button>
                                                     </div>
-                                                    <!--<div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox"> keep me logged-in
-                                                        </label>
-                                                    </div>-->
                                                 </form>
                                             </div>
                                             <div class="bottom text-center">
@@ -1190,8 +1207,8 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
+                    </div>
+                </div>
             </nav>
 
             <div id="alertarea"></div>
@@ -1224,36 +1241,6 @@
                 </form>
             </div>
 
-            <!--<div id="register">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-
-                        <form id="registerForm" action="" method="post" role="form" style="display: none;">
-                            <div class="form-group">
-                                <input type="text" name="name" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6 col-sm-offset-3">
-                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>-->
-
             <!-- New Product UI -->
             <div id="newProduct">
                 <h2>Add New Product</h2>
@@ -1285,7 +1272,6 @@
                 <input type="submit" class="btn btn-primary">
                 </form>
             </div>
-
 
             <!-- Checkout - not logged in modal -->
             <div id="CoNotLoggedInModal" class="modal fade" role="dialog">
@@ -1466,7 +1452,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>

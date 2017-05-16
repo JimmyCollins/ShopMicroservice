@@ -17,11 +17,7 @@
             body: req.body
         };
 
-        console.log("Posting New Order to Orders Service: " + JSON.stringify(req.body));
-
         request(options, function(error, response, body) {
-
-            console.log("Sending request...");
 
             if (error !== null )
             {
@@ -44,8 +40,6 @@
 
             }
 
-            console.log("Done sending order to orders service...");
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });

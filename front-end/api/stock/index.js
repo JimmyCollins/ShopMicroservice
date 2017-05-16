@@ -14,7 +14,6 @@
         helpers.simpleHttpRequest(url, res, next);
     });
 
-
     // Add to the level of stock for a particular product
     app.post("/addStock", function(req, res, body)
     {
@@ -46,12 +45,10 @@
 
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });
     });
-
 
     // Take from the level of stock for a particular product
     app.post("/removeStock", function(req, res, body)
@@ -83,12 +80,10 @@
                 }
             }
 
-            console.log("Status Code: " + response.statusCode);
             res.end();
 
         });
     });
-
 
     module.exports = app;
 }());

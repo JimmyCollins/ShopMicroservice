@@ -6,40 +6,11 @@
     , request   = require("request")
     , helpers   = require("../../helpers")
     , endpoints = require("../endpoints")
-    , app       = express()
+    , app       = express();
 
-  // List items in cart for current logged in user.
- /* app.get("/cart", function (req, res, next) {
-
+  app.get("/cart", function (req, res, next)
+  {
     var custId = helpers.getCustomerId(req, app.get("env"));
-    console.log("Request received: " + req.url + ", " + custId);
-    console.log("Customer ID: " + custId);
-    var options = {
-      uri: endpoints.cartsUrl + "/cart",
-      method: 'GET',
-      json: true,
-      body: {custId: custId}
-    };
-    console.log("GET cart: "
-        + options.uri + " body: " + JSON.stringify(options.body));
-    console.log("GET cart: "
-        +  " options: " + JSON.stringify(options));
-
-    request(options,
-    function (error, response, body) {
-      if (error) {
-        return next(error);
-      }
-      console.log('body '+JSON.stringify(body));
-      helpers.respondStatusBodyJSON(res, response.statusCode, body)
-    });
-  });
-*/
-
-  app.get("/cart", function (req, res, next) {
-    //console.log("Request received: " + req.url + ", " + req.query.custId);
-    var custId = helpers.getCustomerId(req, app.get("env"));
-    //console.log("Customer ID: " + custId);
     request(endpoints.cartsUrl + "/cart/" + custId+"/items",
         function (error, response, body) {
       if (error) {
@@ -52,14 +23,7 @@
   // Delete cart
   app.delete("/cart", function (req, res, next)
   {
-   console.log("Request received (delete cart): " + req.url + ", " + req.query.custId);
-
     var custId = helpers.getCustomerId(req, app.get("env"));
-
-    console.log('Attempting to delete cart for user: ' + custId);
-    //console.log(req);
-
-      console.log(endpoints.cartsUrl + "/" + custId + "/" + req.body.productID);
 
     var options = {
       uri: endpoints.cartsUrl + "/" + custId + "/" + req.params.productID,
@@ -80,14 +44,10 @@
   // Delete item from cart
   app.delete("/cart/:id", function (req, res, next)
   {
-      console.log("Request received (delete item from cart): " + req.url + ", " + req.query.custId);
-
     if (req.params.id == null)
     {
       return next(new Error("Must pass id of item to delete"), 400);
     }
-
-    console.log("Delete item from cart: " + req.url);
 
     var custId = helpers.getCustomerId(req, app.get("env"));
 
@@ -102,7 +62,6 @@
       {
         return next(error);
       }
-      console.log('Item deleted with status: ' + response.statusCode);
       helpers.respondStatus(res, response.statusCode);
     });
 
@@ -118,12 +77,12 @@
     }
 
     var custId = helpers.getCustomerId(req, app.get("env"));
-    console.log("app.delete in api/cart - custId - " + custId);
 
     var qty = req.body.qty;
 
     async.waterfall([
-        function (callback) {
+        function (callback)
+        {
           var options = {
             uri: endpoints.catalogueUrl + "/getProduct",
             method: 'GET',
@@ -131,13 +90,12 @@
             body: {id: req.body.id}
           };
 
-          console.log("GET product: "
-              + options.uri + " body: " + JSON.stringify(options.body));
+          console.log("GET product: " + options.uri + " body: " + JSON.stringify(options.body));
 
           request(options, function (error, response, body)
           {
             console.log(body);
-                console.log(" product id "+body.productID);
+            console.log(" product id "+body.productID);
             callback(error, body);
           });
           
@@ -156,11 +114,13 @@
               name : item.name
             }
           };
-          console.log("POST to carts: " + options.uri
 
-              + " body: " + JSON.stringify(options.body));
-          request(options, function (error, response, body) {
-            if (error) {
+          console.log("POST to carts: " + options.uri + " body: " + JSON.stringify(options.body));
+
+          request(options, function (error, response, body)
+          {
+            if (error)
+            {
               callback(error)
                 return;
             }
