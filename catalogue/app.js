@@ -8,15 +8,15 @@ var mysql = require('mysql');
 var root = __dirname;
 
 var port = (process.env.VCAP_APP_PORT || 3002);
-console.log("Cataloge Service - process.env.VCAP_APP_PORT " + port);
-console.log("Cataloge Service - process.env.PORT " + process.env.PORT);
+console.log("Catalogue Service - process.env.VCAP_APP_PORT " + port);
+console.log("Catalogue Service - process.env.PORT " + process.env.PORT);
 
 var host = (process.env.VCAP_APP_HOST || 'localhost');
-console.log("Cataloge Service - Host is " + host);
+console.log("Catalogue Service - Host is " + host);
 
 if (process.env.VCAP_SERVICES)
 {
-    console.log("Cataloge Service - in if VCAP_SERVICES");
+    console.log("Catalogue Service - in if VCAP_SERVICES");
 
     var services = JSON.parse(process.env.VCAP_SERVICES);
 
@@ -44,7 +44,7 @@ if (process.env.VCAP_SERVICES)
 }
 else
 {
-    console.log("Cataloge Service - VCAP_SERVICES not found");
+    console.log("Catalogue Service - VCAP_SERVICES not found");
     var db = mysql.createConnection({
         host: 'localhost',
         user: 'root',
