@@ -131,6 +131,9 @@
         }
 
 
+        /**
+         * Checkout functionality
+         * */
         function checkout()
         {
             // Check if user is logged in first - we require user details to checkout
@@ -1076,14 +1079,11 @@
                     contentType: 'application/json',
                     data: fd,
                     success: function () {
+                        location.reload();
+                    },
 
-                        $('#alertarea').html("<div class='alert alert-success alert-dismissable'>New car added!<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a></div>");
-
-                        setTimeout(function() {
-                            $(".alert").alert('close');
-                        }, 2000);
-
-                        // TODO: Redirect to main page?
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $("#ErrorModal").modal('show');
                     }
                 });
             });
@@ -1093,7 +1093,6 @@
 
             if (isLoggedIn != undefined)
             {
-                //alert("user should be logged in!!")
                 var name = getCookieValue("user_name");
 
                 // Set the name of the logged in user
@@ -1104,10 +1103,8 @@
                 $("#login-area").hide();
 
                 // Show the logout area and the view orders button
-                console.log("before showing logout");
                 $("#logout-area").show();
                 $("#view-orders").show();
-                console.log("after showing logout");
 
                 // If the user is an admin user, show the admin option
                 var isAdmin = getCookieValue("user_type");
@@ -1139,7 +1136,6 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
-            <!-- REF: http://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form -->
             <nav class="navbar navbar-default navbar-inverse" role="navigation">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -1444,7 +1440,7 @@
                             <h4 class="modal-title">Error</h4>
                         </div>
                         <div class="modal-body">
-                            <p>An error occurred checking out. Please try again later.</p>
+                            <p>An error occurred. Please try again later.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
