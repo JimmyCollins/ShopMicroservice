@@ -202,6 +202,38 @@ var server = http.createServer(function (request, response)
                 });
 
                 break;
+
+            // Return details of a specific product
+            case "/getProduct":
+                console.log("In getProduct");
+                var body="";
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+                    var product = JSON.parse(body);
+                    response.writeHead(200, {
+                        'Content-Type': 'text/html',
+                        'Access-Control-Allow-Origin': '*'
+                    });
+                    console.log("getProduct JSON received" + JSON.stringify(product, null, 2));
+                    var query = "SELECT * FROM products where productID="+
+                        product.id;
+
+                    db.query(
+                        query,
+                        [],
+                        function(err, rows) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(rows, null, 2));
+                            response.end(JSON.stringify(rows[0]));
+                            console.log("Products sent");
+                        }
+                    );
+
+                });
+                break;
         }
     }
     else
@@ -227,38 +259,6 @@ var server = http.createServer(function (request, response)
                         //console.log("Products sent");
                     }
                 );
-                break;
-
-            // Get details of a specific product
-            case "/getProduct":
-                console.log("In getProduct");
-                var body="";
-                request.on('data', function (data) {
-                    body += data;
-                });
-
-                request.on('end', function () {
-                    var product = JSON.parse(body);
-                    response.writeHead(200, {
-                        'Content-Type': 'text/html',
-                        'Access-Control-Allow-Origin': '*'
-                    });
-                    console.log("getProduct JSON received" + JSON.stringify(product, null, 2));
-                    var query = "SELECT * FROM products where productID="+
-                        product.id;
-
-                    db.query(
-                        query,
-                        [],
-                        function(err, rows) {
-                            if (err) throw err;
-                            //console.log(JSON.stringify(rows, null, 2));
-                            response.end(JSON.stringify(rows[0]));
-                            //console.log("Products sent");
-                        }
-                    );
-
-                });
                 break;
         }
     }

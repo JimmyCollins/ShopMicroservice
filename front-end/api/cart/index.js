@@ -92,12 +92,12 @@
         {
           var options = {
             uri: endpoints.catalogueUrl + "/getProduct",
-            method: 'GET',
+            method: 'POST',
             json: true,
             body: {id: req.body.id}
           };
 
-          console.log("GET product: " + options.uri + " body: " + JSON.stringify(options.body));
+          console.log("POST product: " + options.uri + " body: " + JSON.stringify(options.body));
 
           request(options, function (error, response, body)
           {
