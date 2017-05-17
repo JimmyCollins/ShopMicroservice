@@ -3,21 +3,14 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 var p = require('path');
-//var qs = require('querystring');
 var mysql = require('mysql');
 var root = __dirname;
 
 var port = (process.env.VCAP_APP_PORT || 3002);
-console.log("Catalogue Service - process.env.VCAP_APP_PORT " + port);
-console.log("Catalogue Service - process.env.PORT " + process.env.PORT);
-
 var host = (process.env.VCAP_APP_HOST || 'localhost');
-console.log("Catalogue Service - Host is " + host);
 
 if (process.env.VCAP_SERVICES)
 {
-    console.log("Catalogue Service - in if VCAP_SERVICES");
-
     var services = JSON.parse(process.env.VCAP_SERVICES);
 
     for (var svcName in services)
@@ -32,19 +25,11 @@ if (process.env.VCAP_SERVICES)
                 password: mysqlCreds.password,
                 database: mysqlCreds.name
             });
-
-            console.log("DB Name: " + mysqlCreds.name);
-            console.log("DB Host: " + mysqlCreds.hostname);
-            console.log("DB Port: " + mysqlCreds.port);
-            console.log("DB User: " + mysqlCreds.username);
-            console.log("DB Password: " + mysqlCreds.password);
-
         }
     }
 }
 else
 {
-    console.log("Catalogue Service - VCAP_SERVICES not found");
     var db = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -98,7 +83,6 @@ var server = http.createServer(function (request, response)
                             if (err) throw err;
                             console.log(JSON.stringify(result, null, 2));
                             response.end(JSON.stringify(result));
-                            console.log("Product added!");
                         }
                     );
                 });
@@ -128,7 +112,6 @@ var server = http.createServer(function (request, response)
                             if (err) throw err;
                             console.log(JSON.stringify(result, null, 2));
                             response.end(JSON.stringify(result));
-                            console.log("Product deleted!");
                         }
                     );
 
@@ -161,7 +144,6 @@ var server = http.createServer(function (request, response)
                             if (err) throw err;
                             console.log(JSON.stringify(result, null, 2));
                             response.end(JSON.stringify(result));
-                            console.log("Product deactivated!");
                         }
                     );
 
@@ -195,7 +177,6 @@ var server = http.createServer(function (request, response)
                             if (err) throw err;
                             console.log(JSON.stringify(result, null, 2));
                             response.end(JSON.stringify(result));
-                            console.log("Product reactivated!");
                         }
                     );
 
@@ -228,7 +209,6 @@ var server = http.createServer(function (request, response)
                             if (err) throw err;
                             console.log(JSON.stringify(rows, null, 2));
                             response.end(JSON.stringify(rows[0]));
-                            console.log("Products sent");
                         }
                     );
 
@@ -256,7 +236,6 @@ var server = http.createServer(function (request, response)
                         if (err) throw err;
                         //console.log(JSON.stringify(rows, null, 2));
                         response.end(JSON.stringify(rows));
-                        //console.log("Products sent");
                     }
                 );
                 break;
