@@ -50,7 +50,6 @@
         }));
     });
 
-
     // Create Address - TO BE USED FOR TESTING ONLY (for now)
     app.post("/addresses", function(req, res, next) {
         var options = {

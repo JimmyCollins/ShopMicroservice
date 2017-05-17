@@ -70,20 +70,14 @@
   // Add new item to cart
   app.post("/cart", function (req, res, next)
   {
-    console.log("Attempting to add to cart: " + JSON.stringify(req.body));
-
     if (req.body.id == null)
     {
-      console.log("req.body.id is NULL");
       next(new Error("Must pass id of item to add"), 400);
       return;
     }
 
     var custId = helpers.getCustomerId(req, app.get("env"));
-    console.log("custId is " + custId);
-
     var qty = req.body.qty;
-    console.log("qty is " + qty);
 
     async.waterfall([
 

@@ -20,6 +20,7 @@
       status(err.status || 500).
       send(ret);
   };
+
   helpers.mylogger = function(req, res, next) {
 
    console.log('body '+JSON.stringify(req.body));

@@ -13,7 +13,6 @@
   if(process.env.VCAP_SERVICES)
   {
       catalogueUrl = "https://catalogue-api-jc.mybluemix.net";
-      //newProductUrl = "https://catalogue-api-jc.mybluemix.net";
       cartsUrl = "https://cart-jc.mybluemix.net";
       loginUrl = "https://users-jc.mybluemix.net/login";
       registerUrl = "https://users-jc.mybluemix.net/register";
