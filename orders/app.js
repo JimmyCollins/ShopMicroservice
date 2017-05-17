@@ -9,13 +9,9 @@ var url = require('url');
 var mysql = require('mysql');
 
 var port = (process.env.VCAP_APP_PORT || 3005);
-console.log("Orders Service - process.env.VCAP_APP_PORT " + port);
-console.log("Orders Service - process.env.PORT " + process.env.PORT);
 
 if (process.env.VCAP_SERVICES)
 {
-    console.log("Orders Service - in if VCAP_SERVICES");
-
     var services = JSON.parse(process.env.VCAP_SERVICES);
 
     for (var svcName in services)
@@ -30,19 +26,11 @@ if (process.env.VCAP_SERVICES)
                 password: mysqlCreds.password,
                 database: mysqlCreds.name
             });
-
-            console.log("DB Name: " + mysqlCreds.name);
-            console.log("DB Host: " + mysqlCreds.hostname);
-            console.log("DB Port: " + mysqlCreds.port);
-            console.log("DB User: " + mysqlCreds.username);
-            console.log("DB Password: " + mysqlCreds.password);
-
         }
     }
 }
 else
 {
-    console.log("Orders Service - VCAP_SERVICES not found");
     var db = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -55,19 +43,13 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    //console.log("path: "+path);
-    //console.log("url: "+url1);
 
     if (request.method == 'POST')
     {
-        //console.log("method is POST");
-
         switch (path)
         {
             // Add a new order
             case "/order":
-
-                console.log("Orders service - new order");
 
                 var body = '';
 
@@ -78,7 +60,6 @@ var server = http.createServer(function (request, response)
                 request.on('end', function () {
 
                     var orderData = JSON.parse(body);
-
                     console.log("Order data: \n" + JSON.stringify(orderData, null, 2));
 
                     // Insert into orders table
@@ -86,8 +67,6 @@ var server = http.createServer(function (request, response)
 
                     var ordersQuery = "INSERT into orders (customerId, saledate, status)" +
                             " VALUES (" + orderData.customerId +",'" + saleDate + "','" + "Processing" + "')";
-
-                    console.log(ordersQuery);
 
                     db.query(ordersQuery, function(err, result)
                     {
@@ -108,8 +87,6 @@ var server = http.createServer(function (request, response)
                             var orderDetailsQuery = "INSERT into orderdetails (orderID, productID, quantity)" +
                                 "VALUES (" + orderId + "," + productId + "," + quantity +")";
 
-                            console.log(orderDetailsQuery);
-
                             db.query(orderDetailsQuery, function(err, result)
                             {
                                 if (err)
@@ -121,21 +98,13 @@ var server = http.createServer(function (request, response)
 
                         }
 
-                        console.log("ending...");
-                        //response.statusCode =  200;
-                        //response.writeHead(200);
                         response.end();
 
                     });
 
-
-
-                    // TODO: Call into Stock service to decrement stock levels for these products?
-
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
-
 
                 });
 
@@ -145,8 +114,6 @@ var server = http.createServer(function (request, response)
     }
     else if(request.method == 'GET')
     {
-        console.log("method is GET");
-
         switch (path)
         {
             // Get all orders for a particular user
@@ -209,8 +176,6 @@ var server = http.createServer(function (request, response)
                     'Content-Type': 'text/html',
                     'Access-Control-Allow-Origin': '*'
                 });
-
-                console.log("all orders");
 
                 var query = "SELECT * FROM orders ORDER BY orderID DESC"; // TODO: Only open orders?
 
