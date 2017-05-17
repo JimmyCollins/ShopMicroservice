@@ -1,24 +1,12 @@
-/**
- * Users Service
- *
- * TODO
- */
-
 var http = require('http');
 var url = require('url');
 var mysql = require('mysql');
 
 var port = (process.env.VCAP_APP_PORT || 3001);
-console.log("User Service - process.env.VCAP_APP_PORT " + port);
-console.log("User Service - process.env.PORT " + process.env.PORT);
-
 var host = (process.env.VCAP_APP_HOST || 'localhost');
-console.log("User Service - Host is " + host);
 
 if (process.env.VCAP_SERVICES)
 {
-    console.log("User Service - in if VCAP_SERVICES");
-
     var services = JSON.parse(process.env.VCAP_SERVICES);
 
     for (var svcName in services)
@@ -33,19 +21,11 @@ if (process.env.VCAP_SERVICES)
                 password: mysqlCreds.password,
                 database: mysqlCreds.name
             });
-
-            console.log("DB Name: " + mysqlCreds.name);
-            console.log("DB Host: " + mysqlCreds.hostname);
-            console.log("DB Port: " + mysqlCreds.port);
-            console.log("DB User: " + mysqlCreds.username);
-            console.log("DB Password: " + mysqlCreds.password);
-
         }
     }
 }
 else
 {
-    console.log("User Service - VCAP_SERVICES not found");
     var db = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -64,8 +44,6 @@ var server = http.createServer(function (request, response)
 {
     var path = url.parse(request.url).pathname;
     var url1 = url.parse(request.url);
-    //console.log("path: "+path);
-    //console.log("url: "+url1)
 
     if (request.method == 'POST')
     {
@@ -74,7 +52,6 @@ var server = http.createServer(function (request, response)
             // Login functionality
             case "/login":
                 var body = '';
-                //console.log("user Login ");
                 request.on('data', function (data) {
                     body += data;
                 });
@@ -101,7 +78,6 @@ var server = http.createServer(function (request, response)
                             }
                             if (rows!=null && rows.length>0)
                             {
-                                console.log("User is in the database" );
                                 theuserid = rows[0].userID;
                                 theusertype = rows[0].usertype;
                                 theusername = rows[0].name;
@@ -116,13 +92,10 @@ var server = http.createServer(function (request, response)
                             else
                             {
                                 response.end('{"error": "1"}');
-                                console.log("User is not in the database");
-
                             }
 
                         }
                     );
-
 
                 });
 
@@ -153,12 +126,11 @@ var server = http.createServer(function (request, response)
                                 throw err;
                             }
                             if (rows!=null && rows.length>0) {
-                                console.log("User already exists in the database");
                                 response.end('{"error": "2"}');
                             }
                             else{
                                 query = "INSERT INTO users (name, password, address, usertype)"+
-                                        "VALUES(?, ?, ?, 2)"; // FIXME: By default users are added as customers, need to be changed to admin currently in the database
+                                        "VALUES(?, ?, ?, 2)"; // By default users are added as customers, need to be changed to admin currently in the database
                                 db.query(
                                     query,
                                     [obj.name,obj.password,obj.address],
