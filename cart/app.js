@@ -16,10 +16,7 @@ var cart = [];
  */
 app.post("/add", function (req, res, next)
 {
-    console.log("Adding to cart from cart service");
     var obj = req.body;
-    console.log("Customer: " + obj.custId);
-    console.log("Attempting to add to cart: " + JSON.stringify(req.body));
 
     var max = 0;
     var ind = 0;
@@ -81,8 +78,6 @@ app.delete("/cart/:custId/items/:id", function (req, res, next)
     {
         if(c[i].cartid === Number(req.params.id))
         {
-            console.log("Found item to delete");
-
             var indexOfElementToDelete = c.indexOf(c[i]);
             c.splice(indexOfElementToDelete, 1);
 
@@ -102,15 +97,8 @@ app.delete("/cart/:custId/items/:id", function (req, res, next)
 app.get("/cart/:custId/items/", function (req, res, next)
 {
     var custId = req.params.custId;
-    //console.log("getCart" + custId);
-
-    //console.log('custID ' + custId);
-
     console.log(JSON.stringify(cart["" + custId], null, 2));
-
     res.send(JSON.stringify(cart["" + custId]));
-    console.log("cart sent");
-
 });
 
 
