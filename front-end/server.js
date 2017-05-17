@@ -6,7 +6,6 @@ var request      = require("request")
   , async        = require("async")
   , cookieParser = require("cookie-parser")
   , session      = require("express-session")
-  //, epimetheus   = require("epimetheus")
   , config       = require("./config")
   , helpers      = require("./helpers")
   , cart         = require("./api/cart")
@@ -16,8 +15,6 @@ var request      = require("request")
   , user         = require("./api/user")
   , app          = express()
 
-//app.use(express.logger());
-//epimetheus.instrument(app);
 app.use(morgan('combined'));
 app.use(morgan("dev", {}));
 app.use(express.static("public"));
@@ -27,7 +24,6 @@ app.use(helpers.mylogger);
 app.use(cookieParser());
 app.use(helpers.errorHandler);
 app.use(helpers.sessionMiddleware);
-//app.use(morgan("dev", {}));
 
 var domain = "";
 process.argv.forEach(function (val, index, array) {
@@ -40,8 +36,6 @@ process.argv.forEach(function (val, index, array) {
   }
 });
 
-console.log('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
-
 /* Mount API endpoints */
 app.use(cart);
 app.use(catalogue);
@@ -52,7 +46,4 @@ app.use(orders);
 var server = app.listen(process.env.PORT || 8079, function () {
   var port = server.address().port;
   console.log("App now running in %s mode on port %d", app.get("env"), port);
-  //alert("App now running in %s mode on port %d", app.get("env"), port);
-  console.log('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
-  //alert('VCAP SERVICES: ' + JSON.stringify(process.env.VCAP_SERVICES, null, 4));
 });
