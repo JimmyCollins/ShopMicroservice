@@ -186,6 +186,66 @@ var server = http.createServer(function (request, response)
                 });
 
                 break;
+
+            // Make a user an administrator
+            case "/makeUserAdmin":
+
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var user = JSON.parse(body);
+
+                    var query = "UPDATE users SET usertype=1 where userID=" + user.userID;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                        }
+                    );
+
+                });
+
+                break;
+
+            // Revoke a users administrator access
+            case "/revokeUserAdmin":
+
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var user = JSON.parse(body);
+
+                    var query = "UPDATE users SET usertype=2 where userID=" + user.userID;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                        }
+                    );
+
+                });
+
+                break;
         }
     }
     else

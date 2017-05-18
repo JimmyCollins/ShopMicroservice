@@ -20,7 +20,7 @@
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
         var StockManagementHeaders = ["Product ID", "Product Name", "In Stock", "Stock Value", "Add / Remove"];
-        var UserManagementHeaders = ["User ID", "Username", "Address", "Administrator"];
+        var UserManagementHeaders = ["User ID", "Username", "Address", "Administrator", "", ""];
 
         /**
          * Display the cart
@@ -996,6 +996,19 @@
                 out1 = ")" + '">Delete</button></td>';
                 out += out1;
 
+                if(userData[i].usertype == 2)
+                {
+                    out += '<td> <button class="btn btn-success" onclick="makeUserAdmin(' + userData[i].userID;
+                    out1 = ")" + '">Assign Admin</button></td>';
+                    out += out1;
+                }
+                else
+                {
+                    out += '<td> <button class="btn btn-warning" onclick="revokeUserAdmin(' + userData[i].userID;
+                    out1 = ")" + '">Unassign Admin</button></td>';
+                    out += out1;
+                }
+
                 out += "</tr>";
             }
 
@@ -1034,6 +1047,68 @@
 
                 success: function () {
                     $("#UserDeletedModal").modal('show');
+                    displayUserAdmin();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        /**
+         * Make a user an administrator
+         * @param userID The user ID of the user to make an administrator
+         */
+        function makeUserAdmin(userID)
+        {
+            var data = {
+                userID: userID,
+            };
+
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/makeUserAdmin",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#UserTypeChangedModal").modal('show');
+                    displayUserAdmin();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        /**
+         * Revoke a users administrator access
+         * @param userID The user ID of the user for which to revoke access
+         */
+        function revokeUserAdmin(userID)
+        {
+            var data = {
+                userID: userID,
+            };
+
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/revokeUserAdmin",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#UserTypeChangedModal").modal('show');
                     displayUserAdmin();
                 },
 
@@ -1551,7 +1626,7 @@
                 </div>
             </div>
 
-            <!-- User deleted Modal -->
+            <!-- User deleted -->
             <div id="UserDeletedModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -1561,6 +1636,24 @@
                         </div>
                         <div class="modal-body">
                             <p>User deleted successfully.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User type changed -->
+            <div id="UserTypeChangedModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>User type changed successfully.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

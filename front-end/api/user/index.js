@@ -173,6 +173,78 @@
     });
 
 
+    // Make a user an administrator
+    app.post("/makeUserAdmin", function(req, res, next)
+    {
+        var options = {
+            uri: endpoints.usersUrl + "makeUserAdmin",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error deleting user: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error deleting user: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+            }
+
+            res.end();
+
+        });
+    });
+
+
+    // Revoke a users administrator access
+    app.post("/revokeUserAdmin", function(req, res, next)
+    {
+        var options = {
+            uri: endpoints.usersUrl + "revokeUserAdmin",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error deleting user: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error deleting user: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+            }
+
+            res.end();
+
+        });
+    });
+
+
     app.get("/customers/:id", function(req, res, next) {
         helpers.simpleHttpRequest(endpoints.customersUrl + "/" + req.session.customerId, res, next);
     });
