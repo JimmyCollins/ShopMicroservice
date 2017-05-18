@@ -13,6 +13,166 @@
         user_name = "user_name";
 
 
+    // Get all users
+    app.get("/allUsers", function (req, res, next)
+    {
+        var url = endpoints.usersUrl + "allUsers";
+        helpers.simpleHttpRequest(url, res, next);
+    });
+
+
+    // Delete an existing user
+    app.post("/deleteUser", function(req, res, next)
+    {
+        var options = {
+            uri: endpoints.usersUrl + "deleteUser",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("Error deleting user: "+JSON.stringify(error));
+                res.status(500).send('Internal server error!');
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                if (body.error)
+                {
+                    console.log("Error deleting user: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+            }
+
+            res.end();
+
+        });
+    });
+
+
+    // Register a new user
+    app.post("/register", function(req, res, next) {
+        var options = {
+            uri: endpoints.usersUrl + "register",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Posting Customer: " + JSON.stringify(req.body));
+        request(options, function(error, response, body) {
+            if (error !== null ) {
+                console.log("error "+JSON.stringify(error));
+                return;
+            }
+            if (response.statusCode == 200 &&
+                body != null && body != "") {
+                if (body.error) {
+                    console.log("Error with log in: " + err);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+                console.log(body);
+                var customerId = body.id;
+                console.log(customerId);
+                req.session.customerId = customerId;
+                //console.log("set cookie" + customerId);
+                res.status(200);
+                /*res.cookie(cookie_name, req.session.id, {
+                 maxAge: 3600000
+                 }).send({id: customerId});
+                 console.log("Sent cookies.");*/
+                res.end();
+                return;
+            }
+            console.log(response.statusCode);
+
+        });
+
+    });
+
+
+    // Log a user into the site
+    app.post("/login", function(req, res, next) {
+        var options = {
+            uri: endpoints.usersUrl + "login",
+            method: 'POST',
+            json: true,
+            body: req.body
+        };
+
+        console.log("Posting Customer: " + JSON.stringify(req.body));
+
+        request(options, function(error, response, body) {
+
+            if (error !== null )
+            {
+                console.log("error "+JSON.stringify(error));
+                return;
+            }
+
+            if (response.statusCode == 200 && body != null && body != "")
+            {
+                console.log('body '+JSON.stringify(body))
+
+                if (body.error)
+                {
+                    console.log("Error with log in: " + body.error);
+                    res.status(500);
+                    res.end();
+                    return;
+                }
+
+                var customerId = body.customerId;
+                var usertype = body.usertype;
+                var name = body.username;
+
+                req.session.customerId = customerId;
+                req.session.usertype = usertype;
+                req.session.username = name;
+
+                // Set some cookies we need
+
+                // The session ID
+                res.cookie(logged_in, req.session.id, {
+                    maxAge: 14400000
+                });
+
+                // The customer ID
+                res.cookie(customer_id, req.session.customerId, {
+                    maxAge: 14400000
+                });
+
+                // The user type
+                res.cookie(user_type, req.session.usertype, {
+                    maxAge: 14400000
+                });
+
+                // The user name
+                res.cookie(user_name, req.session.username, {
+                    maxAge: 14400000
+                });
+
+                res.status(200);
+
+                res.end();
+                return;
+            }
+            console.log(response.statusCode);
+
+        });
+
+    });
+
+
     app.get("/customers/:id", function(req, res, next) {
         helpers.simpleHttpRequest(endpoints.customersUrl + "/" + req.session.customerId, res, next);
     });
@@ -20,9 +180,9 @@
         helpers.simpleHttpRequest(endpoints.cardsUrl + "/" + req.params.id, res, next);
     });
 
-    app.get("/customers", function(req, res, next) {
+    /*app.get("/customers", function(req, res, next) {
         helpers.simpleHttpRequest(endpoints.customersUrl, res, next);
-    });
+    });*/
     app.get("/addresses", function(req, res, next) {
         helpers.simpleHttpRequest(endpoints.addressUrl, res, next);
     });
@@ -140,136 +300,7 @@
     });
 
     // Create Customer - TO BE USED FOR TESTING ONLY (for now)
-    app.post("/register", function(req, res, next) {
-        var options = {
-            uri: endpoints.registerUrl,
-            method: 'POST',
-            json: true,
-            body: req.body
-        };
 
-        console.log("Posting Customer: " + JSON.stringify(req.body));
-        request(options, function(error, response, body) {
-            if (error !== null ) {
-                console.log("error "+JSON.stringify(error));
-                return;
-            }
-            if (response.statusCode == 200 &&
-                body != null && body != "") {
-                if (body.error) {
-                    console.log("Error with log in: " + err);
-                    res.status(500);
-                    res.end();
-                    return;
-                }
-                console.log(body);
-                var customerId = body.id;
-                console.log(customerId);
-                req.session.customerId = customerId;
-                //console.log("set cookie" + customerId);
-                res.status(200);
-                /*res.cookie(cookie_name, req.session.id, {
-                    maxAge: 3600000
-                }).send({id: customerId});
-                console.log("Sent cookies.");*/
-                res.end();
-                return;
-            }
-            console.log(response.statusCode);
-
-        });
-
-    });
-
-    app.post("/login", function(req, res, next) {
-        var options = {
-            uri: endpoints.loginUrl,
-            method: 'POST',
-            json: true,
-            body: req.body
-        };
-
-        console.log("Posting Customer: " + JSON.stringify(req.body));
-
-        request(options, function(error, response, body) {
-
-            if (error !== null )
-            {
-                console.log("error "+JSON.stringify(error));
-                return;
-            }
-
-            if (response.statusCode == 200 && body != null && body != "")
-            {
-                console.log('body '+JSON.stringify(body))
-
-                if (body.error)
-                {
-                    console.log("Error with log in: " + body.error);
-                    res.status(500);
-                    res.end();
-                    return;
-                }
-
-                //console.log(body);
-
-                var customerId = body.customerId;
-                var usertype = body.usertype;
-                var name = body.username;
-
-                console.log('user id: ' + customerId);
-                console.log('user type: ' + usertype);
-                console.log('user name: ' + name);
-
-                req.session.customerId = customerId;
-                req.session.usertype = usertype;
-                req.session.username = name;
-
-                //console.log("set cookie: " + customerId);
-
-                // TODO: Original Cookie code - delete later
-                /*res.cookie(logged_in, req.session.id, {
-                    maxAge: 14400000
-                }).send({id: customerId});*/
-
-                // Set some cookies we need
-
-                // The session ID
-                res.cookie(logged_in, req.session.id, {
-                    maxAge: 14400000
-                });
-
-                // The customer ID
-                res.cookie(customer_id, req.session.customerId, {
-                    maxAge: 14400000
-                });
-
-                // The user type
-                res.cookie(user_type, req.session.usertype, {
-                    maxAge: 14400000
-                });
-
-                // The user name
-                res.cookie(user_name, req.session.username, {
-                    maxAge: 14400000
-                });
-
-                res.status(200);
-
-                /*res.cookie(user_type , req.session.id, {
-                    maxAge: 14400000
-                }).send({id: usertype});*/
-
-
-                console.log("Sent cookies.");
-                res.end();
-                return;
-            }
-            console.log(response.statusCode);
-
-        });
-
-    });
 
     module.exports = app;
 }());

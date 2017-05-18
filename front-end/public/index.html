@@ -20,6 +20,7 @@
         var OrderHeaders = ["Order ID", "Sale Date", "Status", ""];
         var OrderDetailsHeaders = ["Order Details ID", "Order ID", "Product ID", "Quantity"];
         var StockManagementHeaders = ["Product ID", "Product Name", "In Stock", "Stock Value", "Add / Remove"];
+        var UserManagementHeaders = ["User ID", "Username", "Address", "Administrator"];
 
         /**
          * Display the cart
@@ -70,6 +71,7 @@
             $("#orderDetails").hide();
             $("#stockLevels").hide();
             $("#allOrderDetails").hide();
+            $("#userAdmin").hide();
         }
 
 
@@ -928,6 +930,120 @@
         }
 
 
+        /**
+         * Grab all the user data
+         */
+        function displayUserAdmin()
+        {
+            $.ajax({
+                dataType: "json",
+                url: "/allUsers",
+
+                success: function (data) {
+                    handleDisplayUserAdmin(data);
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
+        /**
+         * Handles displaying the user management user interface
+         * @param userData The user data to display
+         */
+        function handleDisplayUserAdmin(userData)
+        {
+            if(userData.length == 0)
+            {
+                $("#ErrorModal").modal('show');
+                return;
+            }
+
+            var out = '<div class="panel panel-default">';
+            out += '<div class="panel-heading">User Management</div>';
+
+            out += "<table class='table'>";
+            var i;
+            out += '<tr>';
+
+            for (i = 0; i < UserManagementHeaders.length; i++)
+            {
+                out += '<th>' + UserManagementHeaders[i] + '</th>';
+            }
+
+            out += "</tr>";
+
+            for (i = 0; i < userData.length; i++)
+            {
+                out += "<tr>";
+                out += '<td>' + userData[i].userID + '</td>';
+                out += '<td>' + userData[i].name + '</td>';
+                out += '<td>' + userData[i].address + '</td>';
+
+                if(userData[i].usertype == 1)
+                {
+                    out += '<td>Yes</td>';
+                }
+                else
+                {
+                    out += '<td>No</td>';
+                }
+
+                out += '<td> <button class="btn btn-danger" onclick="deleteUser(' + userData[i].userID;
+                out1 = ")" + '">Delete</button></td>';
+                out += out1;
+
+                out += "</tr>";
+            }
+
+            out += "</table>";
+            out += "</div>";
+
+            out += "</div>";
+
+            out += "</div>";
+
+            document.getElementById("userAdmin").innerHTML = out;
+            hideAll();
+            $("#userAdmin").show();
+
+        }
+
+
+        /**
+         * Deletes a user
+         * @param userID The user ID of the user to delete
+         */
+        function deleteUser(userID)
+        {
+            var data = {
+                userID: userID,
+            };
+
+            var dataAsJson = JSON.stringify(data);
+
+            $.ajax
+            ({
+                type: "POST",
+                url: "/deleteUser",
+                contentType: 'application/json',
+                data: dataAsJson,
+
+                success: function () {
+                    $("#UserDeletedModal").modal('show');
+                    displayUserAdmin();
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#ErrorModal").modal('show');
+                }
+            });
+        }
+
+
     </script>
 
 
@@ -1168,6 +1284,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a onclick="showNewProduct()">New Product</a></li>
                                     <li><a onclick="displayStockLevels()">Stock Management</a></li>
+                                    <li><a onclick="displayUserAdmin()">User Management</a></li>
                                     <li><a onclick="displayAllOrders()">View All Orders</a></li>
                                 </ul>
                             </li>
@@ -1217,7 +1334,7 @@
             <div id="orderDetails"></div>
             <div id="stockLevels"></div>
             <div id="allOrderDetails"></div>
-            <div id="cfTemp"></div>
+            <div id="userAdmin"></div>
 
             <!-- Registration UI -->
             <div id="register">
@@ -1426,6 +1543,24 @@
                         </div>
                         <div class="modal-body">
                             <p>Thanks for registering! Please login on the top left to access your account.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User deleted Modal -->
+            <div id="UserDeletedModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>User deleted successfully.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

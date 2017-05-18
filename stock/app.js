@@ -138,14 +138,12 @@ var server = http.createServer(function (request, response)
             // Get the current stock numbers for each product
             case "/currentStock":
 
-                console.log("currentStock");
-
                 response.writeHead(200, {
                     'Content-Type': 'text/html',
                     'Access-Control-Allow-Origin': '*'
                 });
 
-                var query = "SELECT productID, name, quantity, price, active FROM products ";
+                var query = "SELECT productID, name, quantity, price, active FROM products";
 
                 db.query(
                     query,

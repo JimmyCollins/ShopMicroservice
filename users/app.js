@@ -156,6 +156,63 @@ var server = http.createServer(function (request, response)
                 });
 
                 break;
+
+            // Delete a user
+            case "/deleteUser":
+
+                var body = '';
+
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+
+                    var user = JSON.parse(body);
+
+                    var query = "DELETE from users where userID=" + user.userID;
+
+                    // Execute SQL
+                    db.query(
+                        query,
+                        [],
+                        function(err, result) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(result, null, 2));
+                            response.end(JSON.stringify(result));
+                        }
+                    );
+
+                });
+
+                break;
+        }
+    }
+    else
+    {
+        switch (path)
+        {
+            // Get all users
+            case "/allUsers":
+
+                response.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                var query = "SELECT * from users";
+
+                db.query(
+                    query,
+                    [],
+                    function(err, rows) {
+                        if (err) throw err;
+                        console.log(JSON.stringify(rows, null, 2));
+                        response.end(JSON.stringify(rows));
+                    }
+                );
+
+                break;
         }
     }
    
