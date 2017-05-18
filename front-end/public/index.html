@@ -292,7 +292,7 @@
             deleteCookie('logged_in');
             deleteCookie('user_type');
             deleteCookie('user_name');
-            location.reload();
+            reload();
         }
 
 
@@ -1280,7 +1280,7 @@
                     contentType: 'application/json',
                     data: fd,
                     success: function () {
-                        location.reload();
+                        reload();
                     },
 
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
